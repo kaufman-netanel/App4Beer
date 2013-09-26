@@ -1,8 +1,10 @@
 package il.ac.huji.app4beer.DAL;
 
+import il.ac.huji.app4beer.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.EditText;
 //import android.database.sqlite.SQLiteDatabase;
 
 import com.parse.Parse;
@@ -27,7 +29,13 @@ public class DAL {
 	public Boolean IsSignedIn() {
 		String displayname = _preferences.getString("displayname", null);
 		return displayname != null;
-
+	}
+	
+	public void SaveCredentials(String phonenumber, String displayname) {
+		SharedPreferences.Editor editor = _preferences.edit();
+		editor.putString("phonenumber", phonenumber);
+		editor.putString("displayname", displayname);
+		editor.commit();
 	}
 	
 	/*public boolean insert(ITodoItem todoItem) {

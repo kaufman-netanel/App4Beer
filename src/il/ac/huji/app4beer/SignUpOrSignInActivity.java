@@ -1,5 +1,7 @@
 package il.ac.huji.app4beer;
 
+import il.ac.huji.app4beer.DAL.DAL;
+
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -20,11 +22,14 @@ public class SignUpOrSignInActivity extends Activity {
 	private Button _signInButton;
    	private Button _signUpButton;
    	private TextView _errmsg;
+   	private DAL _dal;
 
    	private final class SignAction implements OnClickListener {
     	
     	private Boolean _signin;
-       	
+		private EditText _phonenumber;
+		private EditText _displayname;
+
     	public SignAction(Boolean signin) {
     		_signin = signin;
     	}
@@ -32,7 +37,8 @@ public class SignUpOrSignInActivity extends Activity {
     	private void onDone(ParseUser user, ParseException e, String what) {
  			
   			if (user != null || e == null) {
-  				_errmsg.setText(what);
+  				  _errmsg.setText(what);
+  				  _dal.SaveCredentials(_phonenumber.getText().toString(), _displayname.getText().toString());
 	    		  setResult(RESULT_OK);
 	    		  finish();
 			} else {
@@ -61,21 +67,21 @@ public class SignUpOrSignInActivity extends Activity {
     	
 		public void onClick(View v) {
 			
-			EditText phonenumber = (EditText)findViewById(R.id.phonenumber);
-			EditText displayname = (EditText)findViewById(R.id.displayname);
-			if(phonenumber.getText().length() == 0 || displayname.getText().length() == 0) {
+			_phonenumber = (EditText)findViewById(R.id.phonenumber);
+			_displayname = (EditText)findViewById(R.id.displayname);
+			if(_phonenumber.getText().length() == 0 || _displayname.getText().length() == 0) {
 			      return;
 			}
 
 			v.setEnabled(false);
 			ParseUser user = new ParseUser();
-			user.setUsername(displayname.getText().toString());
-			user.setPassword(phonenumber.getText().toString());
+			user.setUsername(_displayname.getText().toString());
+			user.setPassword(_phonenumber.getText().toString());
 			
 			_errmsg.setText("Wait for it...");
 			if (_signin) {
-				ParseUser.logInInBackground(displayname.getText().toString(), 
-						phonenumber.getText().toString(), 
+				ParseUser.logInInBackground(_displayname.getText().toString(), 
+						_phonenumber.getText().toString(), 
 						new LogInCallback() {
 					@Override
 					public void done(ParseUser user, ParseException e) {
@@ -106,6 +112,8 @@ public class SignUpOrSignInActivity extends Activity {
 		_signUpButton.setOnClickListener(new SignAction(false));	 
     
 		_errmsg = (TextView)findViewById(R.id.errmsg);
+
+		  _dal = new DAL(this);
 	}
 
 
