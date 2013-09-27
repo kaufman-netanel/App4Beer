@@ -19,7 +19,7 @@
             style="@style/ButtonText"/>"
 
     <ListView
-        android:id="@+id/choose_group_list"
+        android:id="@+id/events_group_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>

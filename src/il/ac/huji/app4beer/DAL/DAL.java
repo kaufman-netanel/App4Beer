@@ -1,10 +1,15 @@
 package il.ac.huji.app4beer.DAL;
 
-import il.ac.huji.app4beer.R;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
-import android.widget.EditText;
 //import android.database.sqlite.SQLiteDatabase;
 
 import com.parse.Parse;
@@ -15,14 +20,14 @@ public class DAL {
 	private static final String ClientKey = "eWxzNLLcg80vLUrxo8h3mWdtHUFFirqPJy7ljaLf";
 
 	SqlLiteHelper _sqlLiteHelper;
-	//private SQLiteDatabase _db;
+	private SQLiteDatabase _db;
 	private SharedPreferences _preferences;
 
 	public DAL(Context context) 
 	{  
 		_preferences = PreferenceManager.getDefaultSharedPreferences(context);
-	    //_sqlLiteHelper = new SqlLiteHelper(context);
-	    //_db = _sqlLiteHelper.getWritableDatabase();
+	    _sqlLiteHelper = new SqlLiteHelper(context);
+	    _db = _sqlLiteHelper.getWritableDatabase();
 	    Parse.initialize(context, ParseApplication, ClientKey);
 	}
 	
@@ -37,34 +42,52 @@ public class DAL {
 		editor.putString("displayname", displayname);
 		editor.commit();
 	}
+
+	public List<Event> Events() {
+		List<Event> events = new ArrayList<Event>();
+		 Cursor cursor = allEventsCursor();
+		 if (cursor.moveToFirst()) {
+			 do {
+			    String name = cursor.getString(0);
+			    String description= cursor.getString(1);
+			    Date date = cursor.getLong(2)==0 ? null : new Date(cursor.getLong(2));
+			    events.add(new Event(name, description, date));
+			 } while (cursor.moveToNext());
+		 }
+		 return events;  
+	 }
+	 
+	 public Cursor allEventsCursor() {
+		 return _db.query("events", new String[] { "name", "description", "date" }, null, null, null, null, null);
+	 }
 	
-	/*public boolean insert(ITodoItem todoItem) {
+	public boolean insertEvent(Event event) {
 	    try {
-	    	ContentValues task = createRow(todoItem);
-		    Boolean status = _db.insert("tasks", null, task) != -1;
+	    	ContentValues content = createEventRow(event);
+		    long status = _db.insert("events", null, content) ;
 		    
-		    ParseObject testObject = new ParseObject("todo");
+/*		    ParseObject testObject = new ParseObject("todo");
 		    testObject.put("title", todoItem.getTitle());
 		    if (todoItem.getDueDate()!=null) {
 		    	testObject.put("due", todoItem.getDueDate().getTime());
 		    }
 		    testObject.saveInBackground();
-		    
-			return status;
+	*/	     
+			return status != -1;
 	    } catch (Exception e){
 	    	return false;
 	    }
 	}
 
-	private ContentValues createRow(ITodoItem todoItem) {
-		ContentValues task = new ContentValues();
-	    task.put("title", todoItem.getTitle());
-	    if (todoItem.getDueDate()!=null) {
-	    	task.put("due", todoItem.getDueDate().getTime());
-	    }
-		return task;
+	private ContentValues createEventRow(Event event) {
+		ContentValues content = new ContentValues();
+		content.put("name", event.get_title());
+		content.put("description", event.get_description());
+    	content.put("date", event.get_date().getTime());
+		return content;
 	}
 	
+	/*
 	public boolean update(ITodoItem todoItem) {
 		try {
 		    ContentValues task = createRow(todoItem);
@@ -118,22 +141,5 @@ public class DAL {
 	    }
 	}
 	 
-	 public List<ITodoItem> all() {
-		 List<ITodoItem> tasks = new ArrayList<ITodoItem>();
-		 Cursor cursor = allCursor();
-		 if (cursor.moveToFirst()) {
-			 do {
-			    String title = cursor.getString(0);
-			    long t = cursor.getLong(1);
-			    Date due = cursor.getLong(1)==0 ? null : new Date(cursor.getLong(1));
-			    tasks.add(new Todo(title, due));
-			 } while (cursor.moveToNext());
-		 }
-		 return tasks;  
-	 }
-	 
-	 public Cursor allCursor() {
-		 return _db.query("tasks", new String[] { "title", "due" }, null, null, null, null, null);
-	 }
 */	 
 }

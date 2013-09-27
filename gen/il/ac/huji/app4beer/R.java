@@ -61,7 +61,6 @@ public final class R {
         public static final int chat_user=0x7f080033;
         public static final int checkBox1=0x7f080039;
         public static final int choose_contact_list=0x7f08000d;
-        public static final int choose_group_list=0x7f08000b;
         public static final int createEventLayout=0x7f08000f;
         public static final int createNewGroupBtn=0x7f08000a;
         public static final int create_event_btn=0x7f080016;
@@ -78,6 +77,7 @@ public final class R {
         public static final int event_in_dashboard_date=0x7f080038;
         public static final int event_in_dashboard_name=0x7f080037;
         public static final int event_in_dashboard_new_notifications=0x7f080036;
+        public static final int events_group_list=0x7f08000b;
         public static final int group_delete_btn=0x7f08001a;
         public static final int group_edit_btn=0x7f080019;
         public static final int imageView1=0x7f08003a;

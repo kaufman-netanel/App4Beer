@@ -12,10 +12,11 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		/*    db.execSQL("create table tasks ( " +
+		    db.execSQL("create table events ( " +
 		  	      "_id integer primary key autoincrement, " +
-		  	      "due integer, " +
-		  	      "title string);");*/
+		  	      "date integer, " +
+		  	      "name string, " +
+		  	      "description string);");
 	}
 
 	@Override

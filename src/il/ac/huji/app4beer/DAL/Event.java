@@ -1,4 +1,4 @@
-package il.ac.huji.app4beer;
+package il.ac.huji.app4beer.DAL;
 
 
 import java.util.Date;
@@ -10,9 +10,12 @@ public class Event {
 	private String _title;
 	private String _description;
 	private Date _date;
-	private Time _time;
 	
-	
+	public Event(String title, String description, Date date) {
+		_title = title;
+		_description = description;
+		_date = date;
+	}
 	public String get_title() {
 		return _title;
 	}
@@ -31,13 +34,5 @@ public class Event {
 	public void set_date(Date _date) {
 		this._date = _date;
 	}
-	public Time get_time() {
-		return _time;
-	}
-	public void set_time(Time _time) {
-		this._time = _time;
-	}
-	
-
 
 }
