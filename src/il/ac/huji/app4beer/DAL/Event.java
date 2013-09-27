@@ -1,9 +1,6 @@
 package il.ac.huji.app4beer.DAL;
 
-
 import java.util.Date;
-import android.text.format.Time;
-
 
 public class Event {
 	
@@ -34,5 +31,4 @@ public class Event {
 	public void set_date(Date _date) {
 		this._date = _date;
 	}
-
 }

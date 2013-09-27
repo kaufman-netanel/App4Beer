@@ -29,23 +29,6 @@
         <requestFocus />
     </EditText>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/phonenumber"
-        android:layout_alignLeft="@+id/phonenumber"
-        android:layout_marginBottom="36dp"
-        android:text="Phone Number:" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/displayname"
-        android:layout_alignLeft="@+id/displayname"
-        android:text="Display Name:" />
-
     <Button
         android:id="@+id/signin"
         android:layout_width="wrap_content"
@@ -67,7 +50,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignLeft="@+id/phonenumber"
         android:layout_alignParentTop="true"
         android:layout_marginTop="27dp"
         android:text="Welcome to App4Beer!"

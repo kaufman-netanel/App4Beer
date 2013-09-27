@@ -23,7 +23,17 @@ public class DAL {
 	private SQLiteDatabase _db;
 	private SharedPreferences _preferences;
 
-	public DAL(Context context) 
+	private static DAL _instance = null;
+	
+	public static void Init(Context context) {
+		_instance = new DAL(context);
+	}
+	
+	public static DAL Instance() {
+		return _instance;
+	}
+	
+	private DAL(Context context) 
 	{  
 		_preferences = PreferenceManager.getDefaultSharedPreferences(context);
 	    _sqlLiteHelper = new SqlLiteHelper(context);

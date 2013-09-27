@@ -22,7 +22,6 @@ public class SignUpOrSignInActivity extends Activity {
 	private Button _signInButton;
    	private Button _signUpButton;
    	private TextView _errmsg;
-   	private DAL _dal;
 
    	private final class SignAction implements OnClickListener {
     	
@@ -38,7 +37,7 @@ public class SignUpOrSignInActivity extends Activity {
  			
   			if (user != null || e == null) {
   				  _errmsg.setText(what);
-  				  _dal.SaveCredentials(_phonenumber.getText().toString(), _displayname.getText().toString());
+  				  DAL.Instance().SaveCredentials(_phonenumber.getText().toString(), _displayname.getText().toString());
 	    		  setResult(RESULT_OK);
 	    		  finish();
 			} else {
@@ -113,7 +112,6 @@ public class SignUpOrSignInActivity extends Activity {
     
 		_errmsg = (TextView)findViewById(R.id.errmsg);
 
-		  _dal = new DAL(this);
 	}
 
 

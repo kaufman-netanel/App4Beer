@@ -20,7 +20,6 @@ public class Dashboard extends Activity {
 
 	private static final int SignIn=42;
 	private static final int CreateEvent=43;
-	private DAL _dal; 
 	private ArrayAdapter<Event> _adapter;
 	private List<Event> _events;
 	private ListView _eventsListView;
@@ -30,7 +29,7 @@ public class Dashboard extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
 		
-		_dal = new DAL(this);
+		DAL.Init(this);
 		
 		SignUpOrSignIn();
 		
@@ -43,19 +42,16 @@ public class Dashboard extends Activity {
             }
         });	 
 		
-		Boolean i1 = _dal.insertEvent(new Event("Quadrophenia", "Best Rock Opera Ever!", new Date(2013, 6, 16) ));
-		Boolean i2 = _dal.insertEvent(new Event("Something else", "Really?", new Date(2013, 6, 17) ));
-		
-		_events = _dal.Events();
+		_events = DAL.Instance().Events();
         _eventsListView = 
         		(ListView)findViewById(R.id.events_group_list);
-        _adapter =   new ArrayAdapter<Event>(this,  android.R.layout.simple_list_item_1, _events);
+        _adapter =   new CustomEventAdapter(this, _events);
         _eventsListView.setAdapter(_adapter);
 
 	}
 
 	private void SignUpOrSignIn() {
-		if (!_dal.IsSignedIn()) {
+		if (!DAL.Instance().IsSignedIn()) {
 	        Intent myIntent = new Intent(this, SignUpOrSignInActivity.class);
 	        startActivityForResult(myIntent, SignIn);
 		}
