@@ -49,6 +49,10 @@
             android:label="@string/title_activity_edit_group" >
         </activity>
         <activity
+            android:name="il.ac.huji.app4beer.ChooseParticipantsActivity"
+            android:label="@string/title_activity_choose_participants" >
+        </activity>
+        <activity
             android:name="il.ac.huji.app4beer.ChooseDateOfActivity"
             android:label="@string/title_activity_choose_date_of" >
         </activity>

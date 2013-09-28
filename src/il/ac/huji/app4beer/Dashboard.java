@@ -1,6 +1,5 @@
 package il.ac.huji.app4beer;
 
-import java.util.Date;
 import java.util.List;
 
 import il.ac.huji.app4beer.DAL.DAL;
@@ -10,6 +9,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -64,6 +64,17 @@ public class Dashboard extends Activity {
 		return true;
 	}
 	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    	case R.id.manage_groups:
+    		Intent intent = new Intent(this, ChooseParticipantsActivity.class);
+    		startActivity(intent);
+    		break;
+    	}
+    	return true;
+    }
+    
     @Override
 	protected void onActivityResult(int reqCode, int resCode, Intent data) {
 		  switch (reqCode) {

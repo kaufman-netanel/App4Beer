@@ -81,6 +81,7 @@ public final class R {
         public static final int group_delete_btn=0x7f08001a;
         public static final int group_edit_btn=0x7f080019;
         public static final int imageView1=0x7f080039;
+        public static final int manage_groups=0x7f08003b;
         public static final int phonenumber=0x7f08002a;
         public static final int radioAttendingStatus=0x7f080001;
         public static final int sendBtn=0x7f080015;
@@ -131,7 +132,7 @@ public final class R {
         public static final int attending_prompt=0x7f05000e;
         public static final int blank_date=0x7f05000b;
         public static final int blank_hour=0x7f05000c;
-        public static final int cancel=0x7f05001a;
+        public static final int cancel=0x7f05001b;
         public static final int contacts=0x7f050017;
         public static final int creat_event_add_participants_btn=0x7f050009;
         public static final int creat_new_group_btn=0x7f05000a;
@@ -140,11 +141,12 @@ public final class R {
         public static final int event_name_hint=0x7f050006;
         public static final int groups=0x7f050016;
         public static final int hello_world=0x7f050002;
-        public static final int ok=0x7f050019;
+        public static final int ok=0x7f05001a;
         public static final int send=0x7f050008;
-        public static final int title_activity_attending_dialog=0x7f05001c;
+        public static final int title_activity_attending_dialog=0x7f05001d;
         public static final int title_activity_choose_date_of=0x7f050018;
-        public static final int title_activity_choose_time_of=0x7f05001b;
+        public static final int title_activity_choose_participants=0x7f050019;
+        public static final int title_activity_choose_time_of=0x7f05001c;
         public static final int title_activity_create_event=0x7f050005;
         public static final int title_activity_dash=0x7f050003;
         public static final int title_activity_edit_group=0x7f050015;

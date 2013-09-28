@@ -26,6 +26,7 @@
     <string name="groups">Groups:</string>
     <string name="contacts">Contacts:</string>
     <string name="title_activity_choose_date_of">ChooseDateOfActivity</string>
+    <string name="title_activity_choose_participants">ChooseParticipantsActivity</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_choose_time_of">ChooseTimeOfActivity</string>
