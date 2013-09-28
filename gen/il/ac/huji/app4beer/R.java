@@ -61,6 +61,7 @@ public final class R {
         public static final int chat_user=0x7f080032;
         public static final int checkBox1=0x7f080038;
         public static final int choose_contact_list=0x7f08000d;
+        public static final int contactsTitle=0x7f08000c;
         public static final int createEventLayout=0x7f08000f;
         public static final int createNewGroupBtn=0x7f08000a;
         public static final int create_event_btn=0x7f080016;
@@ -88,7 +89,6 @@ public final class R {
         public static final int signin=0x7f08002c;
         public static final int signup=0x7f08002d;
         public static final int single_group_name=0x7f080018;
-        public static final int textView2=0x7f08000c;
         public static final int textView3=0x7f08002e;
         public static final int textView4=0x7f08002f;
         public static final int textView5=0x7f080030;

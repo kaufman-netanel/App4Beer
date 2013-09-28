@@ -69,6 +69,7 @@ public class Dashboard extends Activity {
     	switch (item.getItemId()) {
     	case R.id.manage_groups:
     		Intent intent = new Intent(this, ChooseParticipantsActivity.class);
+    		intent.putExtra("groupsonly", true);
     		startActivity(intent);
     		break;
     	}
