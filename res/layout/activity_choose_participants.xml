@@ -25,6 +25,14 @@
         android:text="@string/groups"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/no_groups_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(you have no groups)"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/events_group_list"
         android:layout_width="match_parent"

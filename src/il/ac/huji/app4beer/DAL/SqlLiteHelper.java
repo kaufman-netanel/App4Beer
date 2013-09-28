@@ -1,16 +1,13 @@
 package il.ac.huji.app4beer.DAL;
 
-import java.io.Console;
-
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	public SqlLiteHelper(Context context) {
-	    super(context, "app4beer_db", null, 3);
+	    super(context, "app4beer_db", null, 4);
 	}
 	
 	@Override
@@ -37,15 +34,11 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
-		try {
-			String tables[] = {"events", "groups", "contacts", "participants", "eventgroups", "members"};
-			for (int i=0;i<tables.length;i++) {
-				db.execSQL("drop table IF EXISTS "+tables[i]+";");
-			}
-			onCreate(db);
-		} catch (SQLException e) {
-			String msg = e.getMessage();
+		String tables[] = {"events", "groups", "contacts", "participants", "eventgroups", "members"};
+		for (int i=0;i<tables.length;i++) {
+			db.execSQL("drop table IF EXISTS "+tables[i]+";");
 		}
+		onCreate(db);
 	}
 
 }

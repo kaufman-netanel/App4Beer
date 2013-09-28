@@ -1,10 +1,12 @@
-package il.ac.huji.app4beer;
+package il.ac.huji.app4beer.Adapters;
 
+import il.ac.huji.app4beer.R;
 import il.ac.huji.app4beer.DAL.Event;
 
 import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +16,9 @@ import android.widget.TextView;
 
 public class CustomEventAdapter extends ArrayAdapter<Event> {
 	public CustomEventAdapter(
-			Dashboard activity,
+			Context context,
 			List<Event> events) {
-		super(activity, android.R.layout.simple_list_item_1, events);
+		super(context, android.R.layout.simple_list_item_1, events);
 	}
 
 	@SuppressWarnings("deprecation")

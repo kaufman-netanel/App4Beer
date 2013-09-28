@@ -2,6 +2,7 @@ package il.ac.huji.app4beer;
 
 import java.util.List;
 
+import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
 

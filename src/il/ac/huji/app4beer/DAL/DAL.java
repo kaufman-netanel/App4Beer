@@ -96,7 +96,30 @@ public class DAL {
     	content.put("date", event.get_date().getTime());
 		return content;
 	}
-	
+
+	public List<Group> Groups() {
+		List<Group> groups = new ArrayList<Group>();
+		 Cursor cursor = _db.query("groups", new String[] { "name" }, null, null, null, null, null);
+		 if (cursor.moveToFirst()) {
+			 do {
+			    String name = cursor.getString(0);
+			    groups.add(new Group(name));
+			 } while (cursor.moveToNext());
+		 }
+		 return groups;  
+	 }
+	 
+	public boolean insertGroup(Group group) {
+	    try {
+			ContentValues content = new ContentValues();
+			content.put("name", group.get_name());
+		    long status = _db.insert("groups", null, content) ;
+			return status != -1;
+	    } catch (Exception e){
+	    	return false;
+	    }
+	}
+
 	/*
 	public boolean update(ITodoItem todoItem) {
 		try {
