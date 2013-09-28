@@ -6,6 +6,7 @@ import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,11 +15,19 @@ import android.widget.ImageButton;
 
 public class CreateEventActivity extends Activity {
 
+	private static final int ChooseParticipants=42;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_event);
 	
+		initCreateEventButton();	 
+		initAddParticipantsButton();
+
+	}
+
+	private void initCreateEventButton() {
 		ImageButton createEventButton = 
         		(ImageButton)findViewById(R.id.sendBtn);
 		createEventButton.setOnClickListener(new OnClickListener() {
@@ -34,9 +43,18 @@ public class CreateEventActivity extends Activity {
 	    		  setResult(RESULT_OK);
 	    		  finish();
             }
-        });	 
-		
+        });
+	}
 
+	private void initAddParticipantsButton() {
+		ImageButton button = 
+        		(ImageButton)findViewById(R.id.eventAddParticipantsBtn);
+		button.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+    	        Intent myIntent = new Intent(CreateEventActivity.this, ChooseParticipantsActivity.class);
+    	        startActivityForResult(myIntent, ChooseParticipants);
+            }
+        });
 	}
 
 	@Override
@@ -45,5 +63,17 @@ public class CreateEventActivity extends Activity {
 		getMenuInflater().inflate(R.menu.create_event, menu);
 		return true;
 	}
+	
+    @Override
+	protected void onActivityResult(int reqCode, int resCode, Intent data) {
+		  switch (reqCode) {
+		  case ChooseParticipants:
+			  if (resCode==RESULT_OK) {
+				  
+			  }
+			  break;
+		  }
+	}
+
 
 }
