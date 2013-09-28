@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -38,17 +39,20 @@ public class CreateEventActivity extends Activity {
   			      return;
     			}
     			DAL.Instance().insertEvent(new Event(eventName.getText().toString(),
+//    					Event event = new Event(eventName.getText().toString(),
 						eventDescription.getText().toString(), 
 						new Date(2013, 6, 16)));
-	    		  setResult(RESULT_OK);
-	    		  finish();
+        		//Intent result = new Intent();
+        		//result.putExtra("event", event);
+	    		setResult(RESULT_OK);
+	    		finish();
             }
         });
 	}
 
 	private void initAddParticipantsButton() {
-		ImageButton button = 
-        		(ImageButton)findViewById(R.id.eventAddParticipantsBtn);
+		Button button = 
+        		(Button)findViewById(R.id.eventAddParticipantsBtn);
 		button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
     	        Intent myIntent = new Intent(CreateEventActivity.this, ChooseParticipantsActivity.class);

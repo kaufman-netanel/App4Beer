@@ -45,7 +45,7 @@ public class Dashboard extends Activity {
 		_events = DAL.Instance().Events();
         _eventsListView = 
         		(ListView)findViewById(R.id.events_group_list);
-        _adapter =   new CustomEventAdapter(this, _events);
+        _adapter =  new CustomEventAdapter(this, _events);
         _eventsListView.setAdapter(_adapter);
 
 	}
@@ -72,8 +72,16 @@ public class Dashboard extends Activity {
 				  SignUpOrSignIn();
 			  }
 			  break;
+	  case CreateEvent:
+		  if (resCode==RESULT_OK) {
+			  //Event event = (Event) data.getSerializableExtra("event");
+			  //DAL.Instance().insertEvent(event);
+		      //_adapter.add(event);
+				_events = DAL.Instance().Events();
+		        _adapter =  new CustomEventAdapter(this, _events);
+		        _eventsListView.setAdapter(_adapter);
 		  }
+		  break;
+		  }
+	  }
 	}
-
-
-}
