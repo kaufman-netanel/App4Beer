@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class CustomGroupAdapter extends ArrayAdapter<Group> {
+	
 	public CustomGroupAdapter(
 			Context context,
 			List<Group> groups) {

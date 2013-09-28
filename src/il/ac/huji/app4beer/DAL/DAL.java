@@ -120,6 +120,16 @@ public class DAL {
 	    }
 	}
 
+	public boolean removeGroup(String groupName) {
+	    try {
+	    	// TODO cascade?
+		    long status = _db.delete("groups", "name=?",new String[] { groupName });
+			return status != 0;
+	    } catch (Exception e){
+	    	return false;
+	    }
+	}
+
 	/*
 	public boolean update(ITodoItem todoItem) {
 		try {

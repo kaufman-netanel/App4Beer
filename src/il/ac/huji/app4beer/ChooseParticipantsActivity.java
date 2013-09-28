@@ -2,6 +2,7 @@ package il.ac.huji.app4beer;
 
 import java.util.List;
 
+import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
 import il.ac.huji.app4beer.Adapters.CustomGroupAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,7 +21,8 @@ import android.widget.TextView;
 
 public class ChooseParticipantsActivity extends Activity {
 
-	private static final int CreateGroup = 42;
+	public static final int CreateGroup = 42;
+	public static final int EditGroup = 43;
 	
 	private TextView _noGroupsTextView;
 	private TextView _contactsTextView;
@@ -56,8 +59,25 @@ public class ChooseParticipantsActivity extends Activity {
             }
         });	 
 		
+		_groupsListView.setClickable(true);
+		_groupsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+		  @Override
+		  public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+			Group group = (Group)_groupsListView.getItemAtPosition(position);
+		    Intent myIntent = new Intent(ChooseParticipantsActivity.this, EditGroupActivity.class);
+		    myIntent.putExtra("name", group.get_name());
+		    ChooseParticipantsActivity.this.startActivityForResult(myIntent, ChooseParticipantsActivity.EditGroup);
+		  }
+		});
+
+		populateGroupsList();
+
+	}
+
+	private void populateGroupsList() {
 		_groups = DAL.Instance().Groups();
-        
         if (_groups.size()==0) {
         	_groupsListView.setVisibility(View.GONE);
         	_noGroupsTextView.setVisibility(View.VISIBLE);
@@ -65,7 +85,6 @@ public class ChooseParticipantsActivity extends Activity {
             _groupsAdapter =  new CustomGroupAdapter(this, _groups);
             _groupsListView.setAdapter(_groupsAdapter);
         }
-
 	}
 
 	@Override
@@ -73,6 +92,18 @@ public class ChooseParticipantsActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.choose_participants, menu);
 		return true;
+	}
+
+    @Override
+	protected void onActivityResult(int reqCode, int resCode, Intent data) {
+    	switch (reqCode) {
+    		case CreateGroup:
+    		case EditGroup:
+			  if (resCode==RESULT_OK) {
+				  populateGroupsList();
+			  }
+			  break;
+    	}
 	}
 
 }
