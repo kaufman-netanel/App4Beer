@@ -44,6 +44,8 @@
             android:name="il.ac.huji.app4beer.ViewGroupActivity"
             android:label="@string/title_activity_view_group" >
         </activity>
+        <!--             android:theme="@android:style/Theme.Light.Panel"
+        -->
         <activity
             android:name="il.ac.huji.app4beer.EditGroupActivity"
             android:label="@string/title_activity_edit_group" >

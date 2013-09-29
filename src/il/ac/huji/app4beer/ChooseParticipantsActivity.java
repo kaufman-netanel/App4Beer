@@ -72,7 +72,8 @@ public class ChooseParticipantsActivity extends Activity {
 		  public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
 			Group group = (Group)_groupsListView.getItemAtPosition(position);
-		    Intent myIntent = new Intent(ChooseParticipantsActivity.this, EditGroupActivity.class);
+		    Intent myIntent = new Intent(ChooseParticipantsActivity.this, 
+		    		_groupsonly ? EditGroupActivity.class : ViewGroupActivity.class);
 		    myIntent.putExtra("name", group.get_name());
 		    myIntent.putExtra("id", group.get_id());
 		    ChooseParticipantsActivity.this.startActivityForResult(myIntent, ChooseParticipantsActivity.EditGroup);
