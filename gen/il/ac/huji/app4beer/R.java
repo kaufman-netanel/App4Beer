@@ -60,8 +60,7 @@ public final class R {
         public static final int chat_content=0x7f080037;
         public static final int chat_time=0x7f080036;
         public static final int chat_user=0x7f080035;
-        public static final int checkBox1=0x7f08003b;
-        public static final int choose_contact_list=0x7f08000e;
+        public static final int contact_check_box=0x7f080038;
         public static final int contactsTitle=0x7f08000d;
         public static final int createEventLayout=0x7f080010;
         public static final int createNewGroupBtn=0x7f08000a;
@@ -77,13 +76,14 @@ public final class R {
         public static final int eventDescription=0x7f080012;
         public static final int eventName=0x7f080011;
         public static final int eventTime=0x7f080014;
-        public static final int event_in_dashboard_date=0x7f08003a;
-        public static final int event_in_dashboard_name=0x7f080039;
-        public static final int event_in_dashboard_new_notifications=0x7f080038;
-        public static final int events_group_list=0x7f08000c;
+        public static final int event_in_dashboard_date=0x7f08003b;
+        public static final int event_in_dashboard_name=0x7f08003a;
+        public static final int event_in_dashboard_new_notifications=0x7f080039;
         public static final int groupName=0x7f08003d;
+        public static final int group_contact_list=0x7f08000e;
         public static final int group_delete_btn=0x7f08001a;
         public static final int group_edit_btn=0x7f080034;
+        public static final int group_members_list=0x7f08000c;
         public static final int group_ok=0x7f08001b;
         public static final int manage_groups=0x7f08003f;
         public static final int no_groups_text_view=0x7f08000b;
@@ -111,9 +111,10 @@ public final class R {
         public static final int activity_view_group=0x7f030009;
         public static final int chat_item_others_view=0x7f03000a;
         public static final int chat_item_self_view=0x7f03000b;
-        public static final int event_item_in_dashboard=0x7f03000c;
-        public static final int group_in_add_participants=0x7f03000d;
-        public static final int group_in_manage_groups=0x7f03000e;
+        public static final int contact_in_add_participants=0x7f03000c;
+        public static final int event_item_in_dashboard=0x7f03000d;
+        public static final int group_in_add_participants=0x7f03000e;
+        public static final int group_in_manage_groups=0x7f03000f;
     }
     public static final class menu {
         public static final int attending_dialog=0x7f070000;

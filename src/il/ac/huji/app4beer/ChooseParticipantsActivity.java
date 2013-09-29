@@ -2,7 +2,7 @@ package il.ac.huji.app4beer;
 
 import java.util.List;
 
-import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
+import il.ac.huji.app4beer.Adapters.CustomContactsAdapter;
 import il.ac.huji.app4beer.Adapters.CustomGroupAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
@@ -33,6 +33,8 @@ public class ChooseParticipantsActivity extends Activity {
 	private List<Group> _groups;
 	private ArrayAdapter<Contact> _contactsAdapter;
 	private List<Contact> _contacts;
+	
+	private Boolean _groupsonly; 
 
 	
 	@Override
@@ -42,14 +44,17 @@ public class ChooseParticipantsActivity extends Activity {
 
 		_contactsTextView= (TextView)findViewById(R.id.contactsTitle);
 		_noGroupsTextView= (TextView)findViewById(R.id.no_groups_text_view);
-		_contactsListView = (ListView)findViewById(R.id.choose_contact_list);
-		_groupsListView = (ListView)findViewById(R.id.events_group_list);
+		_contactsListView = (ListView)findViewById(R.id.group_contact_list);
+		_groupsListView = (ListView)findViewById(R.id.group_members_list);
 		_createNewGroupButton = (Button)findViewById(R.id.createNewGroupBtn);
 		
-		Boolean groupsonly = getIntent().getExtras().getBoolean("groupsonly", false);
-		if (groupsonly) {
+		Bundle extras = getIntent().getExtras();
+		_groupsonly = extras == null ? false : extras.getBoolean("groupsonly", false);
+		if (_groupsonly) {
 			_contactsTextView.setVisibility(View.GONE);
 			_contactsListView.setVisibility(View.GONE);
+		} else {
+			populateContactsList();
 		}
 		
 		_createNewGroupButton.setOnClickListener(new OnClickListener() {
@@ -82,8 +87,18 @@ public class ChooseParticipantsActivity extends Activity {
         	_groupsListView.setVisibility(View.GONE);
         	_noGroupsTextView.setVisibility(View.VISIBLE);
         } else {
-            _groupsAdapter =  new CustomGroupAdapter(this, _groups);
+            _groupsAdapter =  new CustomGroupAdapter(this, _groups, !_groupsonly);
             _groupsListView.setAdapter(_groupsAdapter);
+        }
+	}
+
+	private void populateContactsList() {
+		_contacts = DAL.Instance().Contacts();
+        if (_contacts.size()==0) {
+        	_contactsListView.setVisibility(View.GONE);
+        } else {
+        	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false);
+        	_contactsListView.setAdapter(_contactsAdapter);
         }
 	}
 

@@ -14,18 +14,22 @@ import android.widget.TextView;
 
 public class CustomGroupAdapter extends ArrayAdapter<Group> {
 	
+	private Boolean _checkedItems;
+
 	public CustomGroupAdapter(
 			Context context,
-			List<Group> groups) {
+			List<Group> groups, Boolean checkedItems) {
 		super(context, android.R.layout.simple_list_item_1, groups);
+		_checkedItems = checkedItems;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Group group= getItem(position);
 		LayoutInflater inflater = LayoutInflater.from(getContext());
-		View view = inflater.inflate(R.layout.group_in_manage_groups, null);
-		TextView name = (TextView)view.findViewById(R.id.groupName);
+		int resource = _checkedItems ? R.layout.group_in_add_participants : R.layout.group_in_manage_groups;
+		View view = inflater.inflate(resource, null);
+		TextView name = (TextView)view.findViewById(R.id.contact_check_box);
 		if (group!=null) {
 			name.setText(group.get_name());
 		}

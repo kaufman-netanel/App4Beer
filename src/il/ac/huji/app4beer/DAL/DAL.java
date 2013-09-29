@@ -158,6 +158,24 @@ public class DAL {
 	    }
 	}
 
+	public List<Contact> Members(String _groupname) {
+		List<Contact> members = new ArrayList<Contact>();
+		if (_groupname == null) {
+			return members;
+		}
+		final String QUERY = "SELECT contacts.name FROM members INNER JOIN groups ON members.groupid=groups._id WHERE groups.name=? INNER JOIN contacts ON members.contactId=contacts._id";
+
+		Cursor cursor = _db.rawQuery(QUERY, new String[]{_groupname});
+		if (cursor.moveToFirst()) {
+			 do {
+				    String name = cursor.getString(0);
+				    String phone = cursor.getString(1);
+				    members.add(new Contact(name, phone));
+			 } while (cursor.moveToNext());
+		 }
+		return members;
+	}
+
 	/*
 	public boolean update(ITodoItem todoItem) {
 		try {

@@ -45,7 +45,7 @@ public class Dashboard extends Activity {
 		
 		_events = DAL.Instance().Events();
         _eventsListView = 
-        		(ListView)findViewById(R.id.events_group_list);
+        		(ListView)findViewById(R.id.group_members_list);
         _adapter =  new CustomEventAdapter(this, _events);
         _eventsListView.setAdapter(_adapter);
 
