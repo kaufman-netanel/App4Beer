@@ -12,7 +12,6 @@
         android:text="CheckBox"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:clickable="false"
         android:textStyle="bold" />
        
 </LinearLayout>

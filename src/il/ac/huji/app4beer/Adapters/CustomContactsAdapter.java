@@ -15,13 +15,16 @@ import android.widget.CheckBox;
 public class CustomContactsAdapter extends ArrayAdapter<Contact> {
 	
 	private Boolean _defaultChecked;
+	private Boolean _checkable;
 
 	public CustomContactsAdapter(
 			Context context,
 			List<Contact> groups,
-			Boolean defaultChecked) {
+			Boolean defaultChecked,
+			Boolean checkable) {
 		super(context, android.R.layout.simple_list_item_1, groups);
 		_defaultChecked = defaultChecked;
+		_checkable = checkable;
 	}
 
 	@Override
@@ -34,6 +37,7 @@ public class CustomContactsAdapter extends ArrayAdapter<Contact> {
 			name.setText(contact.get_name());
 		}
 		name.setChecked(_defaultChecked);
+		name.setClickable(_checkable);
 		return view;
 	}
 }

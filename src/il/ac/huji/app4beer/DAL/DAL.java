@@ -102,11 +102,12 @@ public class DAL {
 
 	public List<Group> Groups() {
 		List<Group> groups = new ArrayList<Group>();
-		 Cursor cursor = _db.query("groups", new String[] { "name" }, null, null, null, null, null);
+		 Cursor cursor = _db.query("groups", new String[] { "_id", "name" }, null, null, null, null, null);
 		 if (cursor.moveToFirst()) {
 			 do {
-			    String name = cursor.getString(0);
-			    groups.add(new Group(name));
+				 int id = cursor.getInt(0);
+			    String name = cursor.getString(1);
+			    groups.add(new Group(name, id));
 			 } while (cursor.moveToNext());
 		 }
 		 return groups;  
@@ -135,12 +136,13 @@ public class DAL {
 	
 	public List<Contact> Contacts() {
 		List<Contact> contacts = new ArrayList<Contact>();
-		 Cursor cursor = _db.query("contacts", new String[] { "name", "phone" }, null, null, null, null, null);
+		 Cursor cursor = _db.query("contacts", new String[] { "name", "phone", "_id" }, null, null, null, null, null);
 		 if (cursor.moveToFirst()) {
 			 do {
 				    String name = cursor.getString(0);
 				    String phone = cursor.getString(1);
-				    contacts.add(new Contact(name, phone));
+				    int id = cursor.getInt(2);
+				    contacts.add(new Contact(name, phone, id));
 			 } while (cursor.moveToNext());
 		 }
 		return contacts;
@@ -158,19 +160,42 @@ public class DAL {
 	    }
 	}
 
-	public List<Contact> Members(String _groupname) {
+	public boolean insertMember(Contact contact, Group group) {
+	    try {
+			ContentValues content = new ContentValues();
+			content.put("contactId", contact.get_id());
+			content.put("groupId", group.get_id());
+		    long status = _db.insert("members", null, content) ;
+			return status != -1;
+	    } catch (Exception e){
+	    	return false;
+	    }
+	}
+
+	public boolean removeMember(Contact contact, Group group) {
+	    try {
+	    	long status = _db.delete("members", "contactId=? AND groupId=?",
+	    			new String[] { contact.get_id().toString(), group.get_id().toString()});
+			return status != 0;
+	    } catch (Exception e){
+	    	return false;
+	    }
+	}
+
+	public List<Contact> Members(Group group) {
 		List<Contact> members = new ArrayList<Contact>();
-		if (_groupname == null) {
+		if (group == null) {
 			return members;
 		}
-		final String QUERY = "SELECT contacts.name FROM members INNER JOIN groups ON members.groupid=groups._id WHERE groups.name=? INNER JOIN contacts ON members.contactId=contacts._id";
+		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id FROM members INNER JOIN contacts ON members.contactId=contacts._id WHERE members.groupId=? ";
 
-		Cursor cursor = _db.rawQuery(QUERY, new String[]{_groupname});
+		Cursor cursor = _db.rawQuery(QUERY, new String[]{group.get_id().toString()});
 		if (cursor.moveToFirst()) {
 			 do {
 				    String name = cursor.getString(0);
 				    String phone = cursor.getString(1);
-				    members.add(new Contact(name, phone));
+				    int id = cursor.getInt(2);
+				    members.add(new Contact(name, phone, id));
 			 } while (cursor.moveToNext());
 		 }
 		return members;

@@ -31,6 +31,7 @@ public class EditGroupActivity extends Activity {
 	private List<Contact> _contacts;
 	private ArrayAdapter<Contact> _membersAdapter;
 	private List<Contact> _members;
+	private Group _group;
 
 	
 	@Override
@@ -39,8 +40,10 @@ public class EditGroupActivity extends Activity {
 		setContentView(R.layout.activity_edit_group);
 		
 		Bundle extras = getIntent().getExtras();
-		String groupname = extras == null ? null : (String) extras.getString("name");
-		final Boolean newgroup = groupname == null;
+		if (extras != null) {
+			_group = new Group((String) extras.getString("name"),extras.getInt("id", -1));
+		}
+		final Boolean newgroup = _group == null;
 
 		_groupDeleteImageButton = (ImageButton)findViewById(R.id.group_delete_btn);
 		_groupOkImageButton = (ImageButton)findViewById(R.id.group_ok);
@@ -65,7 +68,7 @@ public class EditGroupActivity extends Activity {
     			      return;
       			}
     			if (newgroup) {
-    				DAL.Instance().insertGroup(new Group(_groupNameEditText.getText().toString()));
+    				DAL.Instance().insertGroup(new Group(_groupNameEditText.getText().toString(), -1));
     			} else {
     				// TODO update
     			}
@@ -78,7 +81,7 @@ public class EditGroupActivity extends Activity {
 		if (newgroup) {
 			_groupDeleteImageButton.setVisibility(View.INVISIBLE);
 		} else {
-			_groupNameEditText.setText(groupname);
+			_groupNameEditText.setText(_group.get_name());
 		}
 		
 		populateContactsList();
@@ -86,8 +89,10 @@ public class EditGroupActivity extends Activity {
 	}
 
 	private void populateContactsList() {
+		_members = DAL.Instance().Members(_group);
 		_contacts = DAL.Instance().Contacts();
-       	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false);
+
+		_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, false);
        	_contactsListView.setAdapter(_contactsAdapter);
        	_contactsListView.setClickable(true);
        	_contactsListView.setItemsCanFocus(true);
@@ -97,11 +102,11 @@ public class EditGroupActivity extends Activity {
 			Contact contact= (Contact)_contactsListView.getItemAtPosition(position);
 			_contactsAdapter.remove(contact);
 			_membersAdapter.add(contact);
+			DAL.Instance().insertMember(contact, _group);
 		  }
 		});
 
-		_members = DAL.Instance().Contacts();
-		_membersAdapter =  new CustomContactsAdapter(this, _members, true);
+		_membersAdapter =  new CustomContactsAdapter(this, _members, true, false);
        	_membersListView.setAdapter(_membersAdapter);
        	_membersListView.setClickable(true);
        	_membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -110,6 +115,7 @@ public class EditGroupActivity extends Activity {
 			Contact contact= (Contact)_membersListView.getItemAtPosition(position);
 			_contactsAdapter.add(contact);
 			_membersAdapter.remove(contact);
+			DAL.Instance().removeMember(contact, _group);
 		  }
 		});
 }

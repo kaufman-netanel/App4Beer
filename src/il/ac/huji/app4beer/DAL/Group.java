@@ -5,9 +5,11 @@ import java.util.ArrayList;
 public class Group {
 	private String _name;
 	private ArrayList<Contact> _members;
+	private Integer _id;
 	
-	public Group(String name) {
+	public Group(String name, Integer id) {
 		_name = name;
+		set_id(id);
 	}
 	public String get_name() {
 		return _name;
@@ -29,6 +31,12 @@ public class Group {
 			}
 		}
 		return false;
+	}
+	public Integer get_id() {
+		return _id;
+	}
+	public void set_id(int _id) {
+		this._id = _id;
 	}
 
 }

@@ -29,7 +29,8 @@ public class CustomGroupAdapter extends ArrayAdapter<Group> {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		int resource = _checkedItems ? R.layout.group_in_add_participants : R.layout.group_in_manage_groups;
 		View view = inflater.inflate(resource, null);
-		TextView name = (TextView)view.findViewById(R.id.contact_check_box);
+		int nameResource = _checkedItems ? R.id.contact_check_box : R.id.group_name_text_view;
+		TextView name = (TextView)view.findViewById(nameResource);
 		if (group!=null) {
 			name.setText(group.get_name());
 		}

@@ -3,10 +3,12 @@ package il.ac.huji.app4beer.DAL;
 public class Contact {
 	private String _name;
 	private String _phone;
+	private Integer _id;
 	
-	public Contact(String name, String phone) {
+	public Contact(String name, String phone, Integer id) {
 		_name = name;
 		_phone = phone;
+		set_id(id);
 	}
 
 	public String get_phone() {
@@ -20,6 +22,14 @@ public class Contact {
 	}
 	public void set_name(String _name) {
 		this._name = _name;
+	}
+
+	public Integer get_id() {
+		return _id;
+	}
+
+	public void set_id(int _id) {
+		this._id = _id;
 	}
 
 }

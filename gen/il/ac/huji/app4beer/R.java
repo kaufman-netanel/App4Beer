@@ -79,11 +79,11 @@ public final class R {
         public static final int event_in_dashboard_date=0x7f08003b;
         public static final int event_in_dashboard_name=0x7f08003a;
         public static final int event_in_dashboard_new_notifications=0x7f080039;
-        public static final int groupName=0x7f08003d;
         public static final int group_contact_list=0x7f08000e;
         public static final int group_delete_btn=0x7f08001a;
         public static final int group_edit_btn=0x7f080034;
         public static final int group_members_list=0x7f08000c;
+        public static final int group_name_text_view=0x7f08003d;
         public static final int group_ok=0x7f08001b;
         public static final int manage_groups=0x7f08003f;
         public static final int no_groups_text_view=0x7f08000b;

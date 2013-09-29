@@ -65,6 +65,7 @@ public class ChooseParticipantsActivity extends Activity {
         });	 
 		
 		_groupsListView.setClickable(true);
+		_groupsListView.setItemsCanFocus(true);
 		_groupsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 		  @Override
@@ -73,6 +74,7 @@ public class ChooseParticipantsActivity extends Activity {
 			Group group = (Group)_groupsListView.getItemAtPosition(position);
 		    Intent myIntent = new Intent(ChooseParticipantsActivity.this, EditGroupActivity.class);
 		    myIntent.putExtra("name", group.get_name());
+		    myIntent.putExtra("id", group.get_id());
 		    ChooseParticipantsActivity.this.startActivityForResult(myIntent, ChooseParticipantsActivity.EditGroup);
 		  }
 		});
@@ -97,7 +99,7 @@ public class ChooseParticipantsActivity extends Activity {
         if (_contacts.size()==0) {
         	_contactsListView.setVisibility(View.GONE);
         } else {
-        	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false);
+        	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, true);
         	_contactsListView.setAdapter(_contactsAdapter);
         }
 	}
