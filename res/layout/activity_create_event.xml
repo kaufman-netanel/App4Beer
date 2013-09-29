@@ -27,6 +27,14 @@
         </EditText>
 
         <EditText
+            android:id="@+id/eventLocation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="@string/event_location_hint" />
+
+        <EditText
             android:id="@+id/eventDescription"
             android:layout_width="fill_parent"
             android:layout_height="120dp"

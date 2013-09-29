@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	public SqlLiteHelper(Context context) {
-	    super(context, "app4beer_db", null, 7);
+	    super(context, "app4beer_db", null, 9);
 	}
 	
 	@Override
@@ -16,6 +16,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		  	      "_id integer primary key autoincrement, " +
 		  	      "date integer, " +
 		  	      "name string, " +
+		  	      "location string, " +
 		  	      "description string);");
 	    
 	    db.execSQL("create table groups ( " +

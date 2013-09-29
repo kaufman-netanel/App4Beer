@@ -38,6 +38,7 @@ public class CreateEventActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_event);
 	
+		
 		createDateTime();
 		initCreateEventButton();	 
 		initAddParticipantsButton();
@@ -50,6 +51,7 @@ public class CreateEventActivity extends Activity {
             public void onClick(View v) {
             	EditText eventName = (EditText)findViewById(R.id.eventName);
             	EditText eventDescription = (EditText)findViewById(R.id.eventDescription);
+            	EditText eventLocation= (EditText)findViewById(R.id.eventLocation);
             	Calendar c = Calendar.getInstance();
             	Boolean before = _calendar.before(Calendar.getInstance());
     			if(eventName.getText().length() == 0 || 
@@ -61,7 +63,7 @@ public class CreateEventActivity extends Activity {
     			}
     			try {
 	    			DAL.Instance().insertEvent(new Event(eventName.getText().toString(),
-							eventDescription.getText().toString(), 
+							eventDescription.getText().toString(), eventLocation.getText().toString(),
 							_calendar.getTime(), _contacts, _groups));
 		    		setResult(RESULT_OK);
 		    		finish();

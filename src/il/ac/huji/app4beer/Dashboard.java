@@ -3,6 +3,7 @@ package il.ac.huji.app4beer;
 import java.util.List;
 
 import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
+import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
 
@@ -13,12 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 public class Dashboard extends Activity {
 
+	private static final int ManageEvent=42;
 	private static final int CreateEvent=43;
 	private ArrayAdapter<Event> _adapter;
 	private List<Event> _events;
@@ -29,8 +32,7 @@ public class Dashboard extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
 		
-		Button createEventButton = 
-        		(Button)findViewById(R.id.create_event_btn);
+		Button createEventButton = (Button)findViewById(R.id.create_event_btn);
 		createEventButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
     	        Intent myIntent = new Intent(Dashboard.this, CreateEventActivity.class);
@@ -38,11 +40,20 @@ public class Dashboard extends Activity {
             }
         });	 
 		
-		_events = DAL.Instance().Events();
-        _eventsListView = 
-        		(ListView)findViewById(R.id.group_members_list);
-        _adapter =  new CustomEventAdapter(this, _events);
-        _eventsListView.setAdapter(_adapter);
+        _eventsListView = (ListView)findViewById(R.id.group_members_list);
+        loadEvents();
+		_eventsListView.setClickable(true);
+        _eventsListView.setItemsCanFocus(true);
+        _eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        	@Override
+        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        		Event event = (Event)_eventsListView.getItemAtPosition(position);
+        		Intent myIntent = new Intent(Dashboard.this, EventManager.class);
+        		myIntent.putExtra("event", event.get_id());
+        		Dashboard.this.startActivityForResult(myIntent, ManageEvent);
+        	}
+        });
+
 
 	}
 
@@ -68,16 +79,19 @@ public class Dashboard extends Activity {
     @Override
 	protected void onActivityResult(int reqCode, int resCode, Intent data) {
     	switch (reqCode) {
+    	case ManageEvent:
     	case CreateEvent:
-		  if (resCode==RESULT_OK) {
-			  //Event event = (Event) data.getSerializableExtra("event");
-			  //DAL.Instance().insertEvent(event);
-		      //_adapter.add(event);
-				_events = DAL.Instance().Events();
-		        _adapter =  new CustomEventAdapter(this, _events);
-		        _eventsListView.setAdapter(_adapter);
-		  }
-		  break;
-		  }
-	  }
+    		if (resCode==RESULT_OK) {
+    			loadEvents();
+    		}
+    		break;
+		}
+  	}
+
+	private void loadEvents() {
+		_events = DAL.Instance().Events();
+		_adapter =  new CustomEventAdapter(this, _events);
+		_eventsListView.setAdapter(_adapter);
 	}
+
+}

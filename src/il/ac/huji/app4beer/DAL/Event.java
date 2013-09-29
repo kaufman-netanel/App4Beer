@@ -8,25 +8,28 @@ public class Event {
 	
 	private String _title;
 	private String _description;
+	private String _location;
 	private Date _date;
 	private Integer _id;
 	private ArrayList<Integer> _contacts;
 	private ArrayList<Integer> _groups;
 	
-	public Event(String title, String description, Date date, ArrayList<Integer> contacts, ArrayList<Integer> groups) {
+	public Event(String title, String description, String location, Date date, ArrayList<Integer> contacts, ArrayList<Integer> groups) {
 		_title = title;
 		_description = description;
 		_date = date;
 		set_groups(groups);
 		set_contacts(contacts);
 		_id = -1;
+		_location = location;
 	}
 	
-	public Event(Integer id, String title, String description, Date date) {
+	public Event(Integer id, String title, String description, String location, Date date) {
 		_id = id;
 		_title = title;
 		_description = description;
 		_date = date;
+		_location = location;
 		set_groups(new ArrayList<Integer>());
 		set_contacts(new ArrayList<Integer>());
 	}
@@ -81,6 +84,14 @@ public class Event {
 	}
 	public List<Integer> groups() {
 		return _groups;
+	}
+
+	public String get_location() {
+		return _location;
+	}
+
+	public void set_location(String _location) {
+		this._location = _location;
 	}
 
 }

@@ -8,6 +8,7 @@
     <string name="create_event">Create Event</string>
     <string name="title_activity_create_event">CreateEventActivity</string>
     <string name="event_name_hint">Event name...</string>
+    <string name="event_location_hint">Event location...</string>
     <string name="description_hint">Description...</string>
     <string name="send">Send</string>
     <string name="creat_event_add_participants_btn">Add Participants</string>

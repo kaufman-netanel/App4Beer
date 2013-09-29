@@ -65,17 +65,26 @@ public class DAL {
 		editor.putString("displayname", displayname);
 		editor.commit();
 	}
+	public Event readEvent(int id) {
+		List<Event> events = Events("_id='"+id+"'");
+		return events.size()==0?null:events.get(0);
+	}
 
 	public List<Event> Events() {
+		return Events(null);
+	}
+		
+	private List<Event> Events(String selection) {
 		List<Event> events = new ArrayList<Event>();
-		 Cursor cursor = _db.query("events", new String[] { "name", "description", "date", "_id" }, null, null, null, null, null);
+		 Cursor cursor = _db.query("events", new String[] { "name", "description", "date", "_id", "location" }, selection, null, null, null, null);
 		 if (cursor.moveToFirst()) {
 			 do {
 			    String name = cursor.getString(0);
 			    String description= cursor.getString(1);
 			    Date date = cursor.getLong(2)==0 ? null : new Date(cursor.getLong(2));
 			    Integer id = cursor.getInt(3);
-			    Event event = new Event(id, name, description, date);
+			    String location = cursor.getString(4);
+			    Event event = new Event(id, name, description, location, date);
 			    addEventParticipants(event);
 			    addEventGroups(event);
 			    events.add(event);
@@ -112,6 +121,7 @@ public class DAL {
 		ContentValues content = new ContentValues();
 		content.put("name", event.get_title());
 		content.put("description", event.get_description());
+		content.put("location", event.get_location());
     	content.put("date", event.get_date().getTime());
 	    long status = _db.insert("events", null, content) ;
 	    if (status == -1) throw new Exception();
