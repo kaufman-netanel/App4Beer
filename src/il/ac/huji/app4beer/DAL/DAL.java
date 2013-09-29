@@ -13,6 +13,9 @@ import android.preference.PreferenceManager;
 //import android.database.sqlite.SQLiteDatabase;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 public class DAL {
 	
@@ -125,6 +128,31 @@ public class DAL {
 	    	// TODO cascade?
 		    long status = _db.delete("groups", "name=?",new String[] { groupName });
 			return status != 0;
+	    } catch (Exception e){
+	    	return false;
+	    }
+	}
+	
+	public List<Contact> Contacts() {
+		List<Contact> contacts = new ArrayList<Contact>();
+		 Cursor cursor = _db.query("contacts", new String[] { "name", "phone" }, null, null, null, null, null);
+		 if (cursor.moveToFirst()) {
+			 do {
+				    String name = cursor.getString(0);
+				    String phone = cursor.getString(1);
+				    contacts.add(new Contact(name, phone));
+			 } while (cursor.moveToNext());
+		 }
+		return contacts;
+	}
+	
+	public boolean insertContact(Contact contact) {
+	    try {
+			ContentValues content = new ContentValues();
+			content.put("name", contact.get_name());
+			content.put("phone", contact.get_phone());
+		    long status = _db.insert("contacts", null, content) ;
+			return status != -1;
 	    } catch (Exception e){
 	    	return false;
 	    }
