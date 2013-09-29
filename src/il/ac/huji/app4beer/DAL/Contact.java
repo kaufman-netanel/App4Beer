@@ -4,11 +4,13 @@ public class Contact {
 	private String _name;
 	private String _phone;
 	private Integer _id;
-	
+	private Boolean _selected;
+
 	public Contact(String name, String phone, Integer id) {
 		_name = name;
 		_phone = phone;
 		set_id(id);
+		_selected = false;
 	}
 
 	public String get_phone() {
@@ -30,6 +32,14 @@ public class Contact {
 
 	public void set_id(int _id) {
 		this._id = _id;
+	}
+
+	public Boolean get_selected() {
+		return _selected;
+	}
+
+	public void set_selected(Boolean _selected) {
+		this._selected = _selected;
 	}
 
 }

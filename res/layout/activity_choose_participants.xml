@@ -10,14 +10,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ManageGroupsActivity" >
 
-    <Button
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <Button
             android:id="@+id/createNewGroupBtn"
+            style="@style/ButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/creat_new_group_btn"
-            style="@style/ButtonText"/>
+            android:text="@string/creat_new_group_btn" />
+
+        <Button
+            android:id="@+id/choose_ok_button"
+            style="@style/ButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="OK" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

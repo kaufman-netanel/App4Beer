@@ -1,5 +1,6 @@
 package il.ac.huji.app4beer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import il.ac.huji.app4beer.Adapters.CustomContactsAdapter;
@@ -29,11 +30,14 @@ public class ChooseParticipantsActivity extends Activity {
 	private ListView _contactsListView;
 	private ListView _groupsListView;
 	private Button _createNewGroupButton;
+	private Button _okGroupButton;
 	private ArrayAdapter<Group> _groupsAdapter;
 	private List<Group> _groups;
 	private ArrayAdapter<Contact> _contactsAdapter;
 	private List<Contact> _contacts;
-	
+	private ArrayList<Integer> _selectedContacts;
+	private ArrayList<Integer> _selectedGroups;
+
 	private Boolean _groupsonly; 
 
 	
@@ -47,14 +51,39 @@ public class ChooseParticipantsActivity extends Activity {
 		_contactsListView = (ListView)findViewById(R.id.group_contact_list);
 		_groupsListView = (ListView)findViewById(R.id.group_members_list);
 		_createNewGroupButton = (Button)findViewById(R.id.createNewGroupBtn);
+		_okGroupButton = (Button)findViewById(R.id.choose_ok_button);
 		
 		Bundle extras = getIntent().getExtras();
+
+		_selectedContacts = extras == null ? null : extras.getIntegerArrayList("contacts");
+		if (_selectedContacts==null) _selectedContacts = new ArrayList<Integer>(); 
+		_selectedGroups = extras == null ? null : extras.getIntegerArrayList("groups");
+		if (_selectedGroups==null) _selectedGroups = new ArrayList<Integer>(); 
+
 		_groupsonly = extras == null ? false : extras.getBoolean("groupsonly", false);
 		if (_groupsonly) {
 			_contactsTextView.setVisibility(View.GONE);
 			_contactsListView.setVisibility(View.GONE);
+			_okGroupButton.setVisibility(View.GONE);
 		} else {
 			populateContactsList();
+			_okGroupButton.setOnClickListener(new OnClickListener() {
+	            public void onClick(View v) {
+	        		Intent result = new Intent();
+	        		_selectedContacts = new ArrayList<Integer>();
+	        		for (int i=0;i<_contacts.size();i++) {
+	        			if (_contacts.get(i).get_selected()) _selectedContacts.add(_contacts.get(i).get_id());
+	        		}
+	        		result.putIntegerArrayListExtra("contacts", _selectedContacts);
+	        		_selectedGroups = new ArrayList<Integer>();
+	        		for (int i=0;i<_groups.size();i++) {
+	        			if (_groups.get(i).get_selected()) _selectedGroups.add(_groups.get(i).get_id());
+	        		}
+	        		result.putIntegerArrayListExtra("groups", _selectedGroups);
+		    		setResult(RESULT_OK, result);
+		    		finish();
+	            }
+	        });	 
 		}
 		
 		_createNewGroupButton.setOnClickListener(new OnClickListener() {
@@ -90,6 +119,9 @@ public class ChooseParticipantsActivity extends Activity {
         	_groupsListView.setVisibility(View.GONE);
         	_noGroupsTextView.setVisibility(View.VISIBLE);
         } else {
+        	for (int i=0;i<_groups.size();i++) {
+        		if (_selectedGroups.contains(_groups.get(i).get_id())) _groups.get(i).set_selected(true);
+        	}
             _groupsAdapter =  new CustomGroupAdapter(this, _groups, !_groupsonly);
             _groupsListView.setAdapter(_groupsAdapter);
         }
@@ -100,7 +132,10 @@ public class ChooseParticipantsActivity extends Activity {
         if (_contacts.size()==0) {
         	_contactsListView.setVisibility(View.GONE);
         } else {
-        	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, true);
+        	for (int i=0;i<_contacts.size();i++) {
+        		if (_selectedContacts.contains(_contacts.get(i).get_id())) _contacts.get(i).set_selected(true);
+        	}
+      	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, true);
         	_contactsListView.setAdapter(_contactsAdapter);
         }
 	}

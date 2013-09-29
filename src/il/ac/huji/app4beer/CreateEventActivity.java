@@ -1,5 +1,6 @@
 package il.ac.huji.app4beer;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import il.ac.huji.app4beer.DAL.DAL;
@@ -17,6 +18,9 @@ import android.widget.ImageButton;
 public class CreateEventActivity extends Activity {
 
 	private static final int ChooseParticipants=42;
+
+	private ArrayList<Integer> _contacts;
+	private ArrayList<Integer> _groups;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +42,14 @@ public class CreateEventActivity extends Activity {
     			if(eventName.getText().length() == 0 || eventDescription.getText().length() == 0) {
   			      return;
     			}
-    			DAL.Instance().insertEvent(new Event(eventName.getText().toString(),
-//    					Event event = new Event(eventName.getText().toString(),
-						eventDescription.getText().toString(), 
-						new Date(2013, 6, 16)));
-        		//Intent result = new Intent();
-        		//result.putExtra("event", event);
-	    		setResult(RESULT_OK);
-	    		finish();
+    			try {
+	    			DAL.Instance().insertEvent(new Event(eventName.getText().toString(),
+							eventDescription.getText().toString(), 
+							new Date(2013, 6, 16), _contacts, _groups));
+		    		setResult(RESULT_OK);
+		    		finish();
+    			} catch (Exception e) { 				
+    			}
             }
         });
 	}
@@ -56,7 +60,9 @@ public class CreateEventActivity extends Activity {
 		button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
     	        Intent myIntent = new Intent(CreateEventActivity.this, ChooseParticipantsActivity.class);
-    	        startActivityForResult(myIntent, ChooseParticipants);
+    	        myIntent.putIntegerArrayListExtra("contacts", _contacts);
+    	        myIntent.putIntegerArrayListExtra("groups", _groups);
+  	        startActivityForResult(myIntent, ChooseParticipants);
             }
         });
 	}
@@ -73,6 +79,8 @@ public class CreateEventActivity extends Activity {
 		  switch (reqCode) {
 		  case ChooseParticipants:
 			  if (resCode==RESULT_OK) {
+				  _contacts = data.getIntegerArrayListExtra("contacts");
+				  _groups = data.getIntegerArrayListExtra("groups");
 				  
 			  }
 			  break;

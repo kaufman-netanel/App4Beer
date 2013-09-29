@@ -8,9 +8,13 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
 
 public class CustomContactsAdapter extends ArrayAdapter<Contact> {
 	
@@ -29,15 +33,25 @@ public class CustomContactsAdapter extends ArrayAdapter<Contact> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Contact contact= getItem(position);
+		final Contact contact= getItem(position);
 		LayoutInflater inflater = LayoutInflater.from(getContext());
-		View view = inflater.inflate(R.layout.contact_in_add_participants, null);
-		CheckBox name = (CheckBox)view.findViewById(R.id.contact_check_box);
+		int resource = _checkable ? R.layout.contact_in_add_participants : R.layout.contact_in_view_participants;
+		View view = inflater.inflate(resource, null);
+		TextView name = (TextView)view.findViewById(R.id.contact_check_box);
 		if (contact!=null) {
 			name.setText(contact.get_name());
 		}
-		name.setChecked(_defaultChecked);
-		name.setClickable(_checkable);
+		//name.setClickable(_checkable);
+		if (_checkable) {
+			//((CheckBox)name).setChecked(_defaultChecked);
+			((CheckBox)name).setChecked(contact.get_selected());
+			((CheckBox)name).setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+					contact.set_selected(arg1);
+				}
+			});
+		}
 		return view;
 	}
 }

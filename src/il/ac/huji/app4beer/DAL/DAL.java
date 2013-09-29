@@ -58,27 +58,71 @@ public class DAL {
 
 	public List<Event> Events() {
 		List<Event> events = new ArrayList<Event>();
-		 Cursor cursor = allEventsCursor();
+		 Cursor cursor = _db.query("events", new String[] { "name", "description", "date", "_id" }, null, null, null, null, null);
 		 if (cursor.moveToFirst()) {
 			 do {
 			    String name = cursor.getString(0);
 			    String description= cursor.getString(1);
 			    Date date = cursor.getLong(2)==0 ? null : new Date(cursor.getLong(2));
-			    events.add(new Event(name, description, date));
+			    Integer id = cursor.getInt(3);
+			    Event event = new Event(id, name, description, date);
+			    addEventParticipants(event);
+			    addEventGroups(event);
+			    events.add(event);
 			 } while (cursor.moveToNext());
 		 }
 		 return events;  
 	 }
 	 
-	 public Cursor allEventsCursor() {
-		 return _db.query("events", new String[] { "name", "description", "date" }, null, null, null, null, null);
-	 }
-	
-	public boolean insertEvent(Event event) {
-	    try {
-	    	ContentValues content = createEventRow(event);
-		    long status = _db.insert("events", null, content) ;
-		    
+	private void addEventParticipants(Event event) {
+		 Cursor cursor = _db.query("participants", new String[] { "contactid" }, 
+				 "eventid = '"+event.get_id()+"'",
+				 null, null, null, null);
+		 if (cursor.moveToFirst()) {
+			 do {
+			    int contactid = cursor.getInt(0);
+			    event.add_contact(contactid);
+			 } while (cursor.moveToNext());
+		 }
+	}
+
+	private void addEventGroups(Event event) {
+		 Cursor cursor = _db.query("eventgroups", new String[] { "groupid" }, 
+				 "eventid = '"+event.get_id()+"'",
+				 null, null, null, null);
+		 if (cursor.moveToFirst()) {
+			 do {
+			    int id = cursor.getInt(0);
+			    event.add_group(id);
+			 } while (cursor.moveToNext());
+		 }
+	}
+
+	public void insertEvent(Event event) throws Exception {
+		ContentValues content = new ContentValues();
+		content.put("name", event.get_title());
+		content.put("description", event.get_description());
+    	content.put("date", event.get_date().getTime());
+	    long status = _db.insert("events", null, content) ;
+	    if (status == -1) throw new Exception();
+	    
+	    List<Integer> groups = event.groups();
+	    for (int i=0;i<groups.size();i++) {
+			content = new ContentValues();
+			content.put("eventid", event.get_id());
+			content.put("groupid", groups.get(i));
+		    status = _db.insert("eventgroups", null, content) ;
+		    if (status == -1) throw new Exception();
+	    }
+	    
+	    List<Integer> contacts = event.contacts();
+	    for (int i=0;i<contacts.size();i++) {
+			content = new ContentValues();
+			content.put("eventid", event.get_id());
+			content.put("contactid", contacts.get(i));
+		    status = _db.insert("participants", null, content) ;
+		    if (status == -1) throw new Exception();
+	    }
 /*		    ParseObject testObject = new ParseObject("todo");
 		    testObject.put("title", todoItem.getTitle());
 		    if (todoItem.getDueDate()!=null) {
@@ -86,18 +130,6 @@ public class DAL {
 		    }
 		    testObject.saveInBackground();
 	*/	     
-			return status != -1;
-	    } catch (Exception e){
-	    	return false;
-	    }
-	}
-
-	private ContentValues createEventRow(Event event) {
-		ContentValues content = new ContentValues();
-		content.put("name", event.get_title());
-		content.put("description", event.get_description());
-    	content.put("date", event.get_date().getTime());
-		return content;
 	}
 
 	public List<Group> Groups() {
@@ -195,7 +227,9 @@ public class DAL {
 				    String name = cursor.getString(0);
 				    String phone = cursor.getString(1);
 				    int id = cursor.getInt(2);
-				    members.add(new Contact(name, phone, id));
+				    Contact contact = new Contact(name, phone, id);
+				    contact.set_selected(true);
+				    members.add(contact);
 			 } while (cursor.moveToNext());
 		 }
 		return members;

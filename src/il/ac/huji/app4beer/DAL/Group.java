@@ -6,10 +6,12 @@ public class Group {
 	private String _name;
 	private ArrayList<Contact> _members;
 	private Integer _id;
+	private Boolean _selected;
 	
 	public Group(String name, Integer id) {
 		_name = name;
 		set_id(id);
+		_selected = false;
 	}
 	public String get_name() {
 		return _name;
@@ -37,6 +39,12 @@ public class Group {
 	}
 	public void set_id(int _id) {
 		this._id = _id;
+	}
+	public Boolean get_selected() {
+		return _selected;
+	}
+	public void set_selected(Boolean _selected) {
+		this._selected = _selected;
 	}
 
 }

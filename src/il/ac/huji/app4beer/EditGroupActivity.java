@@ -94,7 +94,7 @@ public class EditGroupActivity extends Activity {
 		
 		removeMembersFromContacts();
 
-		_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, false);
+		_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, true);
        	_contactsListView.setAdapter(_contactsAdapter);
        	_contactsListView.setClickable(true);
        	_contactsListView.setItemsCanFocus(true);
@@ -102,19 +102,21 @@ public class EditGroupActivity extends Activity {
 		  @Override
 		  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Contact contact= (Contact)_contactsListView.getItemAtPosition(position);
-			_contactsAdapter.remove(contact);
+			contact.set_selected(true);
 			_membersAdapter.add(contact);
+			_contactsAdapter.remove(contact);
 			DAL.Instance().insertMember(contact, _group);
 		  }
 		});
 
-		_membersAdapter =  new CustomContactsAdapter(this, _members, true, false);
+		_membersAdapter =  new CustomContactsAdapter(this, _members, true, true);
        	_membersListView.setAdapter(_membersAdapter);
        	_membersListView.setClickable(true);
        	_membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		  @Override
 		  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Contact contact= (Contact)_membersListView.getItemAtPosition(position);
+			contact.set_selected(false);
 			_contactsAdapter.add(contact);
 			_membersAdapter.remove(contact);
 			DAL.Instance().removeMember(contact, _group);
