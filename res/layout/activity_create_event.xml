@@ -47,10 +47,10 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
+                android:editable="false"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="@string/blank_date"
-                android:inputType="date" />
+                android:hint="@string/blank_date" />
 
             <EditText
                 android:id="@+id/eventTime"
@@ -59,10 +59,10 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
+                android:editable="false"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="@string/blank_hour"
-                android:inputType="time" />
+                android:hint="@string/blank_hour" />
 
         </LinearLayout>
 

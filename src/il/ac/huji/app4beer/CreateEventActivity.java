@@ -1,19 +1,25 @@
 package il.ac.huji.app4beer;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TimePicker;
 
 public class CreateEventActivity extends Activity {
 
@@ -21,37 +27,98 @@ public class CreateEventActivity extends Activity {
 
 	private ArrayList<Integer> _contacts;
 	private ArrayList<Integer> _groups;
+	private EditText _eventDate;
+	private EditText _eventTime;
+	private Boolean _dateSet;
+	private Boolean _timeSet;
+	private Calendar _calendar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_event);
 	
+		createDateTime();
 		initCreateEventButton();	 
 		initAddParticipantsButton();
 
 	}
 
 	private void initCreateEventButton() {
-		ImageButton createEventButton = 
-        		(ImageButton)findViewById(R.id.sendBtn);
+		ImageButton createEventButton = (ImageButton)findViewById(R.id.sendBtn);
 		createEventButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	EditText eventName = (EditText)findViewById(R.id.eventName);
             	EditText eventDescription = (EditText)findViewById(R.id.eventDescription);
-    			if(eventName.getText().length() == 0 || eventDescription.getText().length() == 0) {
+            	Calendar c = Calendar.getInstance();
+            	Boolean before = _calendar.before(Calendar.getInstance());
+    			if(eventName.getText().length() == 0 || 
+    				eventDescription.getText().length() == 0 ||
+    				!_dateSet || 
+    				!_timeSet ||
+    				_calendar.before(Calendar.getInstance())) {
   			      return;
     			}
     			try {
 	    			DAL.Instance().insertEvent(new Event(eventName.getText().toString(),
 							eventDescription.getText().toString(), 
-							new Date(2013, 6, 16), _contacts, _groups));
+							_calendar.getTime(), _contacts, _groups));
 		    		setResult(RESULT_OK);
 		    		finish();
-    			} catch (Exception e) { 				
+    			} catch (Exception e) {
     			}
             }
         });
+		
+	}
+
+	private void createDateTime() {
+		_calendar = Calendar.getInstance();
+		_dateSet = false;
+		_timeSet = false;
+		
+		_eventDate = (EditText)findViewById(R.id.eventDate);
+		_eventTime = (EditText)findViewById(R.id.eventTime);
+		
+		final OnDateSetListener odsl=new OnDateSetListener()
+        {
+			@Override
+			public void onDateSet(DatePicker arg0, int year, int month, int dayOfMonth) {
+				_eventDate.setText(String.format("%02d / %02d / %04d", dayOfMonth, month, year));
+				_dateSet = true;
+				_calendar.set(year, month, dayOfMonth);
+			}
+        };
+
+        _eventDate.setFocusable(false);
+        _eventDate.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View arg0) {
+        		DatePickerDialog datePickDiag=new DatePickerDialog(CreateEventActivity.this,odsl,_calendar.get(Calendar.YEAR),_calendar.get(Calendar.MONTH),_calendar.get(Calendar.DAY_OF_MONTH));
+        		datePickDiag.show();
+        	}
+        });
+
+		final OnTimeSetListener otsl=new OnTimeSetListener()
+        {
+			@Override
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				_eventTime.setText(String.format("%02d : %02d", hourOfDay, minute));
+				_timeSet = true;
+				_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				_calendar.set(Calendar.MINUTE, minute);
+			}
+        };
+
+        _eventTime.setFocusable(false);
+        _eventTime.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View arg0) {
+        		TimePickerDialog timePickDiag=new TimePickerDialog(CreateEventActivity.this,otsl,_calendar.get(Calendar.HOUR_OF_DAY),_calendar.get(Calendar.MINUTE),true);
+        	    timePickDiag.show();
+        	}
+        });
+
 	}
 
 	private void initAddParticipantsButton() {

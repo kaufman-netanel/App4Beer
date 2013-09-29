@@ -12,7 +12,7 @@
     <string name="send">Send</string>
     <string name="creat_event_add_participants_btn">Add Participants</string>
     <string name="creat_new_group_btn">Create new group</string>
-    <string name="blank_date">____  /  ____</string>
+    <string name="blank_date">___  /  ___  / ___</string>
     <string name="blank_hour">____  :  ____</string>
     <string name="title_activity_event_manager">EventManager</string>
     <string name="attending_prompt">aaaaaa</string>

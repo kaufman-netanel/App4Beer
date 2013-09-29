@@ -107,21 +107,25 @@ public class DAL {
 	    if (status == -1) throw new Exception();
 	    
 	    List<Integer> groups = event.groups();
-	    for (int i=0;i<groups.size();i++) {
-			content = new ContentValues();
-			content.put("eventid", event.get_id());
-			content.put("groupid", groups.get(i));
-		    status = _db.insert("eventgroups", null, content) ;
-		    if (status == -1) throw new Exception();
+	    if (groups!=null) {
+		    for (int i=0;i<groups.size();i++) {
+				content = new ContentValues();
+				content.put("eventid", event.get_id());
+				content.put("groupid", groups.get(i));
+			    status = _db.insert("eventgroups", null, content) ;
+			    if (status == -1) throw new Exception();
+		    }
 	    }
 	    
 	    List<Integer> contacts = event.contacts();
-	    for (int i=0;i<contacts.size();i++) {
-			content = new ContentValues();
-			content.put("eventid", event.get_id());
-			content.put("contactid", contacts.get(i));
-		    status = _db.insert("participants", null, content) ;
-		    if (status == -1) throw new Exception();
+	    if (contacts!=null) {
+		    	for (int i=0;i<contacts.size();i++) {
+				content = new ContentValues();
+				content.put("eventid", event.get_id());
+				content.put("contactid", contacts.get(i));
+			    status = _db.insert("participants", null, content) ;
+			    if (status == -1) throw new Exception();
+		    }
 	    }
 /*		    ParseObject testObject = new ParseObject("todo");
 		    testObject.put("title", todoItem.getTitle());
