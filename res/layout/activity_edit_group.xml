@@ -62,7 +62,7 @@
         android:id="@+id/contactsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/contacts" />
+        android:text="Add contacts:" />
 
     <ListView
         android:id="@+id/group_contact_list"

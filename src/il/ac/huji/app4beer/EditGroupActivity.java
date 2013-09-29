@@ -91,6 +91,8 @@ public class EditGroupActivity extends Activity {
 	private void populateContactsList() {
 		_members = DAL.Instance().Members(_group);
 		_contacts = DAL.Instance().Contacts();
+		
+		removeMembersFromContacts();
 
 		_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, false);
        	_contactsListView.setAdapter(_contactsAdapter);
@@ -119,6 +121,18 @@ public class EditGroupActivity extends Activity {
 		  }
 		});
 }
+
+	private void removeMembersFromContacts() {
+		for (int i=0;i<_members.size();i++) {
+			for (int j=0;j<_contacts.size();j++) {
+				if (_contacts.get(j).get_id()==_members.get(i).get_id()) {
+					_contacts.remove(j);
+					break;
+				}
+			}
+		}
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
