@@ -68,7 +68,12 @@ public class EditGroupActivity extends Activity {
     			      return;
       			}
     			if (newgroup) {
-    				DAL.Instance().insertGroup(new Group(_groupNameEditText.getText().toString(), -1));
+    				try {
+						DAL.Instance().insertGroup(new Group(_groupNameEditText.getText().toString(), -1));
+					} catch (Exception e) {
+						e.printStackTrace();
+						return;
+					}
     			} else {
     				// TODO update
     			}
@@ -103,9 +108,13 @@ public class EditGroupActivity extends Activity {
 		  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Contact contact= (Contact)_contactsListView.getItemAtPosition(position);
 			contact.set_selected(true);
-			_membersAdapter.add(contact);
-			_contactsAdapter.remove(contact);
-			DAL.Instance().insertMember(contact, _group);
+			try {
+				DAL.Instance().insertMember(contact, _group);
+				_membersAdapter.add(contact);
+				_contactsAdapter.remove(contact);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		  }
 		});
 

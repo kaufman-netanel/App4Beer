@@ -1,10 +1,26 @@
 package il.ac.huji.app4beer.DAL;
 
 public class Contact {
+	
+	public static class Source { 
+		public final static int OWNER = 0;
+		public final static int GROUP = 1;
+		public final static int CONTACTS = 2;
+	}		
+	
+	public static class Attending { 
+		public final static int YES = 0;
+		public final static int NO = 1;
+		public final static int MAYBE = 2;
+		public final static int SO = 3;
+	}		
+	
 	private String _name;
 	private String _phone;
 	private Integer _id;
 	private Boolean _selected;
+	private int _source;
+	private int _attending;
 
 	public Contact(String name, String phone, Integer id) {
 		_name = name;
@@ -40,6 +56,22 @@ public class Contact {
 
 	public void set_selected(Boolean _selected) {
 		this._selected = _selected;
+	}
+
+	public int get_source() {
+		return _source;
+	}
+
+	public void set_source(int _source) {
+		this._source = _source;
+	}
+
+	public int get_attending() {
+		return _attending;
+	}
+
+	public void set_attending(int _attending) {
+		this._attending = _attending;
 	}
 
 }

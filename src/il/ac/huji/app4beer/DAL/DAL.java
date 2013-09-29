@@ -65,6 +65,7 @@ public class DAL {
 		editor.putString("displayname", displayname);
 		editor.commit();
 	}
+	
 	public Event readEvent(int id) {
 		List<Event> events = Events("_id='"+id+"'");
 		return events.size()==0?null:events.get(0);
@@ -105,6 +106,38 @@ public class DAL {
 		 }
 	}
 
+	public ArrayList<Contact> Participants(Integer eventId) {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
+		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id, participants.soure, participants.attending FROM participants INNER JOIN contacts ON members.contactId=participants.contactid WHERE participants.eventid=? ";
+		Cursor cursor = _db.rawQuery(QUERY, new String[]{eventId.toString()});
+		 if (cursor.moveToFirst()) {
+			 do {
+			    String name= cursor.getString(0);
+			    String phone= cursor.getString(1);
+			    int id = cursor.getInt(2);
+			    int source = cursor.getInt(3);
+			    int attending = cursor.getInt(4);
+			    Contact contact = new Contact(name, phone, id);
+			    contact.set_source(source);
+			    contact.set_attending(attending);
+			    contacts.add(contact);
+			 } while (cursor.moveToNext());
+		 }
+		 return contacts;
+	}
+	
+	public long insertParticipant(Contact contact) throws Exception {
+		if (readContact(contact.get_name())==null) {
+			insertContact(contact);
+		}
+		ContentValues content = new ContentValues();
+		content.put("name", contact.get_name());
+		content.put("phone", contact.get_phone());
+	    long id = _db.insert("participants", null, content) ;
+		if (id == -1) throw new Exception();
+		return id;
+	}
+
 	private void addEventGroups(Event event) {
 		 Cursor cursor = _db.query("eventgroups", new String[] { "groupid" }, 
 				 "eventid = '"+event.get_id()+"'",
@@ -117,36 +150,48 @@ public class DAL {
 		 }
 	}
 
-	public void insertEvent(Event event) throws Exception {
-		ContentValues content = new ContentValues();
-		content.put("name", event.get_title());
-		content.put("description", event.get_description());
-		content.put("location", event.get_location());
-    	content.put("date", event.get_date().getTime());
-	    long status = _db.insert("events", null, content) ;
-	    if (status == -1) throw new Exception();
-	    
-	    List<Integer> groups = event.groups();
-	    if (groups!=null) {
-		    for (int i=0;i<groups.size();i++) {
-				content = new ContentValues();
-				content.put("eventid", event.get_id());
-				content.put("groupid", groups.get(i));
-			    status = _db.insert("eventgroups", null, content) ;
-			    if (status == -1) throw new Exception();
+	public long insertEvent(Event event) throws Exception {
+		_db.beginTransaction();
+		long id;
+        try {
+        	
+	        ContentValues content = new ContentValues();
+			content.put("name", event.get_title());
+			content.put("description", event.get_description());
+			content.put("location", event.get_location());
+	    	content.put("date", event.get_date().getTime());
+		    id = _db.insert("events", null, content) ;
+		    if (id  == -1) throw new Exception();
+		    
+		    List<Integer> groups = event.groups();
+		    if (groups!=null) {
+			    for (int i=0;i<groups.size();i++) {
+					content = new ContentValues();
+					content.put("eventid", event.get_id());
+					content.put("groupid", groups.get(i));
+				    long status = _db.insert("eventgroups", null, content) ;
+				    if (status == -1) throw new Exception();
+			    }
 		    }
-	    }
-	    
-	    List<Integer> contacts = event.contacts();
-	    if (contacts!=null) {
-		    	for (int i=0;i<contacts.size();i++) {
-				content = new ContentValues();
-				content.put("eventid", event.get_id());
-				content.put("contactid", contacts.get(i));
-			    status = _db.insert("participants", null, content) ;
-			    if (status == -1) throw new Exception();
+		    
+		    List<Integer> contacts = event.contacts();
+		    if (contacts!=null) {
+			    	for (int i=0;i<contacts.size();i++) {
+					content = new ContentValues();
+					content.put("eventid", event.get_id());
+					content.put("contactid", contacts.get(i));
+				    long status = _db.insert("participants", null, content) ;
+				    if (status == -1) throw new Exception();
+			    }
 		    }
-	    }
+		    
+		    _db.setTransactionSuccessful();
+		    
+        }finally {
+        	_db.endTransaction();
+        }
+	    return id;
+
 /*		    ParseObject testObject = new ParseObject("todo");
 		    testObject.put("title", todoItem.getTitle());
 		    if (todoItem.getDueDate()!=null) {
@@ -169,15 +214,12 @@ public class DAL {
 		 return groups;  
 	 }
 	 
-	public boolean insertGroup(Group group) {
-	    try {
-			ContentValues content = new ContentValues();
-			content.put("name", group.get_name());
-		    long status = _db.insert("groups", null, content) ;
-			return status != -1;
-	    } catch (Exception e){
-	    	return false;
-	    }
+	public long insertGroup(Group group) throws Exception {
+		ContentValues content = new ContentValues();
+		content.put("name", group.get_name());
+	    long id = _db.insert("groups", null, content) ;
+		if (id == -1) throw new Exception();
+		return id;
 	}
 
 	public boolean removeGroup(String groupName) {
@@ -190,9 +232,18 @@ public class DAL {
 	    }
 	}
 	
+	public Contact readContact(String name) {
+		List<Contact> contacts = Contacts("name='"+name+"'");
+		return contacts.size()==0?null:contacts.get(0);
+	}
+
 	public List<Contact> Contacts() {
+		return Contacts(null);
+	}
+	
+	private List<Contact> Contacts(String selection) {
 		List<Contact> contacts = new ArrayList<Contact>();
-		 Cursor cursor = _db.query("contacts", new String[] { "name", "phone", "_id" }, null, null, null, null, null);
+		 Cursor cursor = _db.query("contacts", new String[] { "name", "phone", "_id" }, selection, null, null, null, null);
 		 if (cursor.moveToFirst()) {
 			 do {
 				    String name = cursor.getString(0);
@@ -204,28 +255,22 @@ public class DAL {
 		return contacts;
 	}
 	
-	public boolean insertContact(Contact contact) {
-	    try {
-			ContentValues content = new ContentValues();
-			content.put("name", contact.get_name());
-			content.put("phone", contact.get_phone());
-		    long status = _db.insert("contacts", null, content) ;
-			return status != -1;
-	    } catch (Exception e){
-	    	return false;
-	    }
+	public long insertContact(Contact contact) throws Exception {
+		ContentValues content = new ContentValues();
+		content.put("name", contact.get_name());
+		content.put("phone", contact.get_phone());
+	    long id = _db.insert("contacts", null, content) ;
+		if (id == -1) throw new Exception();
+		return id;
 	}
 
-	public boolean insertMember(Contact contact, Group group) {
-	    try {
-			ContentValues content = new ContentValues();
-			content.put("contactId", contact.get_id());
-			content.put("groupId", group.get_id());
-		    long status = _db.insert("members", null, content) ;
-			return status != -1;
-	    } catch (Exception e){
-	    	return false;
-	    }
+	public long insertMember(Contact contact, Group group) throws Exception {
+		ContentValues content = new ContentValues();
+		content.put("contactId", contact.get_id());
+		content.put("groupId", group.get_id());
+	    long id = _db.insert("members", null, content) ;
+		if (id == -1) throw new Exception();
+		return id;
 	}
 
 	public boolean removeMember(Contact contact, Group group) {
@@ -244,7 +289,6 @@ public class DAL {
 			return members;
 		}
 		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id FROM members INNER JOIN contacts ON members.contactId=contacts._id WHERE members.groupId=? ";
-
 		Cursor cursor = _db.rawQuery(QUERY, new String[]{group.get_id().toString()});
 		if (cursor.moveToFirst()) {
 			 do {
