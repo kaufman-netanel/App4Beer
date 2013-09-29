@@ -12,10 +12,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 //import android.database.sqlite.SQLiteDatabase;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class DAL {
 	
@@ -46,7 +49,14 @@ public class DAL {
 	
 	public Boolean IsSignedIn() {
 		String displayname = _preferences.getString("displayname", null);
-		return displayname != null;
+		if (displayname == null) return false;
+		String phonenumber = _preferences.getString("phonenumber", null);
+		try {
+			ParseUser user = ParseUser.logIn(displayname, phonenumber);
+			return user != null;
+		} catch (ParseException e) {
+			return false; 
+		} 
 	}
 	
 	public void SaveCredentials(String phonenumber, String displayname) {

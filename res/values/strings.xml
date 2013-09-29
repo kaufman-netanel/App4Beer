@@ -31,5 +31,6 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_choose_time_of">ChooseTimeOfActivity</string>
     <string name="title_activity_attending_dialog">AttendingDialog</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

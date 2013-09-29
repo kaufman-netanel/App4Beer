@@ -19,7 +19,6 @@ import android.widget.ListView;
 
 public class Dashboard extends Activity {
 
-	private static final int SignIn=42;
 	private static final int CreateEvent=43;
 	private ArrayAdapter<Event> _adapter;
 	private List<Event> _events;
@@ -29,10 +28,6 @@ public class Dashboard extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
-		
-		DAL.Init(this);
-		
-		SignUpOrSignIn();
 		
 		Button createEventButton = 
         		(Button)findViewById(R.id.create_event_btn);
@@ -49,13 +44,6 @@ public class Dashboard extends Activity {
         _adapter =  new CustomEventAdapter(this, _events);
         _eventsListView.setAdapter(_adapter);
 
-	}
-
-	private void SignUpOrSignIn() {
-		if (!DAL.Instance().IsSignedIn()) {
-	        Intent myIntent = new Intent(this, SignUpOrSignInActivity.class);
-	        startActivityForResult(myIntent, SignIn);
-		}
 	}
 
 	@Override
@@ -79,13 +67,8 @@ public class Dashboard extends Activity {
     
     @Override
 	protected void onActivityResult(int reqCode, int resCode, Intent data) {
-		  switch (reqCode) {
-		  case SignIn:
-			  if (resCode!=RESULT_OK) {
-				  SignUpOrSignIn();
-			  }
-			  break;
-	  case CreateEvent:
+    	switch (reqCode) {
+    	case CreateEvent:
 		  if (resCode==RESULT_OK) {
 			  //Event event = (Event) data.getSerializableExtra("event");
 			  //DAL.Instance().insertEvent(event);

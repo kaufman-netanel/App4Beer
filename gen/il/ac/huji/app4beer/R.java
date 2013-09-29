@@ -21,16 +21,17 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int blue_button=0x7f020000;
-        public static final int chat_bg_others=0x7f020001;
-        public static final int chat_bg_self=0x7f020002;
-        public static final int edit=0x7f020003;
-        public static final int expand=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int layout_border=0x7f020006;
-        public static final int send_chat=0x7f020007;
-        public static final int send_event=0x7f020008;
-        public static final int trash=0x7f020009;
+        public static final int beer4=0x7f020000;
+        public static final int blue_button=0x7f020001;
+        public static final int chat_bg_others=0x7f020002;
+        public static final int chat_bg_self=0x7f020003;
+        public static final int edit=0x7f020004;
+        public static final int expand=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int layout_border=0x7f020007;
+        public static final int send_chat=0x7f020008;
+        public static final int send_event=0x7f020009;
+        public static final int trash=0x7f02000a;
     }
     public static final class id {
         public static final int EventManager_Desc=0x7f080023;
@@ -109,14 +110,15 @@ public final class R {
         public static final int activity_edit_group=0x7f030006;
         public static final int activity_event_manager=0x7f030007;
         public static final int activity_main=0x7f030008;
-        public static final int activity_view_group=0x7f030009;
-        public static final int chat_item_others_view=0x7f03000a;
-        public static final int chat_item_self_view=0x7f03000b;
-        public static final int contact_in_add_participants=0x7f03000c;
-        public static final int contact_in_view_participants=0x7f03000d;
-        public static final int event_item_in_dashboard=0x7f03000e;
-        public static final int group_in_add_participants=0x7f03000f;
-        public static final int group_in_manage_groups=0x7f030010;
+        public static final int activity_sign=0x7f030009;
+        public static final int activity_view_group=0x7f03000a;
+        public static final int chat_item_others_view=0x7f03000b;
+        public static final int chat_item_self_view=0x7f03000c;
+        public static final int contact_in_add_participants=0x7f03000d;
+        public static final int contact_in_view_participants=0x7f03000e;
+        public static final int event_item_in_dashboard=0x7f03000f;
+        public static final int group_in_add_participants=0x7f030010;
+        public static final int group_in_manage_groups=0x7f030011;
     }
     public static final class menu {
         public static final int attending_dialog=0x7f070000;
@@ -159,6 +161,7 @@ public final class R {
         public static final int title_activity_dash=0x7f050003;
         public static final int title_activity_edit_group=0x7f050015;
         public static final int title_activity_event_manager=0x7f05000d;
+        public static final int title_activity_main=0x7f05001e;
         public static final int title_activity_manage_groups=0x7f050013;
         public static final int title_activity_view_group=0x7f050014;
     }

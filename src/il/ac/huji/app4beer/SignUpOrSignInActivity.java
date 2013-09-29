@@ -102,7 +102,7 @@ public class SignUpOrSignInActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sign);
 		
 		_signInButton = (Button)findViewById(R.id.signin);
 		_signInButton.setOnClickListener(new SignAction(true));	 
