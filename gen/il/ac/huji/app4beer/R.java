@@ -73,12 +73,12 @@ public final class R {
         public static final int displayname=0x7f08002e;
         public static final int edit_group_image_button=0x7f08003e;
         public static final int errmsg=0x7f080034;
-        public static final int eventAddParticipantsBtn=0x7f080017;
-        public static final int eventDate=0x7f080015;
-        public static final int eventDescription=0x7f080014;
-        public static final int eventLocation=0x7f080013;
-        public static final int eventName=0x7f080012;
-        public static final int eventTime=0x7f080016;
+        public static final int eventAddParticipantsBtn=0x7f080012;
+        public static final int eventDate=0x7f080016;
+        public static final int eventDescription=0x7f080018;
+        public static final int eventLocation=0x7f080015;
+        public static final int eventName=0x7f080014;
+        public static final int eventTime=0x7f080017;
         public static final int event_in_dashboard_date=0x7f08003d;
         public static final int event_in_dashboard_name=0x7f08003c;
         public static final int event_in_dashboard_new_notifications=0x7f08003b;
@@ -92,7 +92,7 @@ public final class R {
         public static final int no_groups_text_view=0x7f08000c;
         public static final int phonenumber=0x7f08002d;
         public static final int radioAttendingStatus=0x7f080001;
-        public static final int sendBtn=0x7f080018;
+        public static final int sendBtn=0x7f080013;
         public static final int signin=0x7f08002f;
         public static final int signup=0x7f080030;
         public static final int single_group_name=0x7f08001b;

@@ -127,7 +127,7 @@ public class CreateEventActivity extends Activity {
         _eventTime.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View arg0) {
-        		TimePickerDialog timePickDiag=new TimePickerDialog(CreateEventActivity.this,otsl,_calendar.get(Calendar.HOUR_OF_DAY),_calendar.get(Calendar.MINUTE),true);
+        		TimePickerDialog timePickDiag=new TimePickerDialog(CreateEventActivity.this,otsl,_calendar.get(Calendar.HOUR_OF_DAY),_calendar.get(Calendar.MINUTE)+1,true);
         	    timePickDiag.show();
         	}
         });
