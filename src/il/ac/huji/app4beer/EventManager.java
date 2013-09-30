@@ -195,6 +195,18 @@ public class EventManager extends Activity {
 					PushEvent pEvent = new PushEvent(_event);
 					String what = (String) list.getItemAtPosition(position);
 					pEvent.updateAttendance(what);
+					
+					int att = Attending.SO;
+					if (what.equals(EventManager.OF_COURSE)) att=(Attending.YES);
+					if (what.equals(EventManager.MAYBE)) att=(Attending.MAYBE);
+					if (what.equals(EventManager.NOT_COMING)) att=(Attending.NO);
+					Contact contact = DAL.Instance().readContact(ParseUser.getCurrentUser().getUsername());
+					contact.set_attending(att);
+					try {
+						DAL.Instance().updateParticipant(contact, _event);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
                 	_popup.dismiss();
                 	_click = true;
 
