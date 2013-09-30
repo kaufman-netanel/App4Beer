@@ -122,7 +122,7 @@ public class PushEvent {
 		if (what.equals(EventManager.OF_COURSE)) msg.setAtt(Attending.YES);
 		if (what.equals(EventManager.MAYBE)) msg.setAtt(Attending.MAYBE);
 		if (what.equals(EventManager.NOT_COMING)) msg.setAtt(Attending.NO);
-		push(ParseProxy.PushType.UpdateAttendance, msg, msg.getContact()+" say: "+msg.getEvent()+"? "+what);
+		push(ParseProxy.PushType.UpdateAttendance, msg, msg.getContact()+" says: "+msg.getEvent()+"? "+what);
 	}
 	
 }

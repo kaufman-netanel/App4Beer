@@ -29,9 +29,11 @@ public final class R {
         public static final int expand=0x7f020005;
         public static final int ic_launcher=0x7f020006;
         public static final int layout_border=0x7f020007;
-        public static final int send_chat=0x7f020008;
-        public static final int send_event=0x7f020009;
-        public static final int trash=0x7f02000a;
+        public static final int ok=0x7f020008;
+        public static final int send_chat=0x7f020009;
+        public static final int send_event=0x7f02000a;
+        public static final int trash=0x7f02000b;
+        public static final int user_group_new=0x7f02000c;
     }
     public static final class id {
         public static final int EventManager_Desc=0x7f080024;

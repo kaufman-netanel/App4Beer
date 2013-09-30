@@ -42,7 +42,7 @@
             android:layout_gravity="center"
             android:layout_marginRight="8dp"
             android:clickable="true"
-            android:src="@drawable/trash" />
+            android:src="@drawable/ok" />
 
     </LinearLayout>
 

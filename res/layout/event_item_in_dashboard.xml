@@ -46,6 +46,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="14dp"
         android:text="52"
-        android:textSize="28px" />
+        android:textSize="28px"
+        android:visibility="invisible" />
 
 </RelativeLayout>

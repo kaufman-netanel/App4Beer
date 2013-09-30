@@ -10,9 +10,10 @@
         android:id="@+id/EventManager_editBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="50dp"
         android:layout_gravity="top|right"
-        android:background="@drawable/edit" />
+        android:layout_marginTop="50dp"
+        android:background="@drawable/edit"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="fill_parent"
