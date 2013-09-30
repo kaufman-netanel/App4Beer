@@ -8,6 +8,7 @@ import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
+import il.ac.huji.app4beer.DAL.Message;
 import il.ac.huji.app4beer.DAL.ParseProxy;
 import il.ac.huji.app4beer.DAL.ParseProxy.PushEnvelope;
 import il.ac.huji.app4beer.DAL.PushEvent;
@@ -74,6 +75,16 @@ public class Dashboard extends Activity {
 			PushEvent pEvent = gson.fromJson(env.getMessage(), PushEvent.class);
 			try {
 				pEvent.persist();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case Tweet:
+			PushEvent.MessageParcel mParcel = gson.fromJson(env.getMessage(), PushEvent.MessageParcel.class);
+			try {
+				Message message = new Message(DAL.Instance().readContact(mParcel.get_contact()).get_id(),
+						DAL.Instance().readEvent(mParcel.get_event()).get_id(), mParcel.get_message());
+				DAL.Instance().insertMessage(message);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

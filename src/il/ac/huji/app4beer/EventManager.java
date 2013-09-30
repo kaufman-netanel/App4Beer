@@ -8,11 +8,14 @@ import java.util.List;
 import com.parse.ParseUser;
 
 import il.ac.huji.app4beer.Adapters.CustomContactsAdapter;
+import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
 import il.ac.huji.app4beer.Adapters.CustomGroupAdapter;
+import il.ac.huji.app4beer.Adapters.CustomMessagesAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.Contact.Attending;
 import il.ac.huji.app4beer.DAL.Event;
 import il.ac.huji.app4beer.DAL.DAL;
+import il.ac.huji.app4beer.DAL.Message;
 import il.ac.huji.app4beer.DAL.ParseProxy;
 import il.ac.huji.app4beer.DAL.PushEvent;
 import android.os.Bundle;
@@ -28,6 +31,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -42,27 +47,37 @@ public class EventManager extends Activity {
 	private TextView _eventLocationTextView;
 	private TextView _eventDateTextView;
 	private TextView _eventTimeTextView;
+	private EditText _chatMessageTextView;
 	private Button _attendButton;
+	private ImageButton _sendButton;
 	private List<Button> _buttons;
 	private List<List<Contact>> _contacts; 
 	private List<ArrayAdapter<Contact>> _contactsAdapter;
 	private List<CustomPopup> _popUps;
 	private Boolean _myEvent;
 	private AttendCustomPopup _attendCustomPopup;
-	
+	private PushEvent _pushEvent;
+	private ArrayAdapter<Message> _adapter;
+	private List<Message> _messages;
+	private ListView _messagesListView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event_manager);
 		int id = getIntent().getExtras().getInt("event");
 		_event = DAL.Instance().readEvent(id);
-		
+		_pushEvent = new PushEvent(_event);
+		 
 		_eventTitleTextView = (TextView)findViewById(R.id.EventManager_title);
 		_eventDescriptionTextView = (TextView)findViewById(R.id.EventManager_Desc);
 		_eventLocationTextView = (TextView)findViewById(R.id.EventManager_location);
 		_eventDateTextView = (TextView)findViewById(R.id.EventManager_date);
 		_eventTimeTextView = (TextView)findViewById(R.id.EventManager_time);
 		_attendButton = (Button)findViewById(R.id.attendBtn);
+		_sendButton = (ImageButton)findViewById(R.id.EventManager_chatSend);
+		_chatMessageTextView = (EditText)findViewById(R.id.EventManager_chatMsg);
+		_messagesListView = (ListView)findViewById(R.id.chat_list_view);
 		
 		_eventTitleTextView.setText(_event.get_title());
 		_eventDescriptionTextView.setText(_event.get_description());
@@ -94,7 +109,27 @@ public class EventManager extends Activity {
 			_attendCustomPopup = new AttendCustomPopup(this, _attendButton);
 		}
 		
+		initChat();
+		_sendButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				try {
+					_pushEvent.SendMessage(_chatMessageTextView.getText().toString());
+					_chatMessageTextView.getText().clear();
+					initChat();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}				
+			}
+		});
 
+	}
+
+	private void initChat() {
+		_messages = DAL.Instance().Messages(_event.get_id());
+		_adapter =  new CustomMessagesAdapter(this, _messages);
+		_messagesListView.setAdapter(_adapter);
 	}
 
 	@Override
@@ -192,9 +227,8 @@ public class EventManager extends Activity {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					PushEvent pEvent = new PushEvent(_event);
 					String what = (String) list.getItemAtPosition(position);
-					pEvent.updateAttendance(what);
+					_pushEvent.updateAttendance(what);
 					
 					int att = Attending.SO;
 					if (what.equals(EventManager.OF_COURSE)) att=(Attending.YES);

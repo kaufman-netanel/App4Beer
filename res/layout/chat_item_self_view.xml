@@ -23,7 +23,8 @@
             android:layout_marginLeft="6dp"
             android:text="(19/02/2012 13:02)"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:visibility="gone" />
 
     </LinearLayout>
 

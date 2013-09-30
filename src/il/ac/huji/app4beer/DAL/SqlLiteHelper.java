@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	public SqlLiteHelper(Context context) {
-	    super(context, "app4beer_db", null, 17);
+	    super(context, "app4beer_db", null, 18);
 	}
 	
 	@Override
@@ -39,6 +39,9 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	    
 	    db.execSQL("create table members ( " +
 		  	      "contactid integer, groupid integer);");
+	    
+	    db.execSQL("create table messages ( " +
+		  	      "contactid integer, eventid integer, message string);");
 	}
 
 	@Override

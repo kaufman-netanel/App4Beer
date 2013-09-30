@@ -26,7 +26,7 @@ import com.parse.SendCallback;
 public class ParseProxy {
 
 	static public enum PushType {
-		NewEvent, UpdateAttendance
+		NewEvent, UpdateAttendance, Tweet
 	}
 
 	private static final String ParseApplication = "WK71gB5ZUn0MvUrePNzxVNStnKZBMfUdP6PGwFft";

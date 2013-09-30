@@ -332,6 +332,29 @@ public class DAL {
 		return id;
 	}
 
+	public long insertMessage(Message message) throws Exception {
+		ContentValues content = new ContentValues();
+		content.put("contactid", message.get_contactid());
+		content.put("eventid", message.get_eventid());
+		content.put("message", message.get_message());
+	    long id = _db.insert("messages", null, content) ;
+		if (id == -1) throw new Exception();
+		return id;
+	}
+
+	public List<Message> Messages(Integer eventid) {
+		List<Message> messages = new ArrayList<Message>();
+		 Cursor cursor = _db.query("messages", new String[] { "contactid", "message" }, "eventid='"+eventid+"'", null, null, null, null);
+		 if (cursor.moveToFirst()) {
+			 do {
+				    Integer contactid = cursor.getInt(0);
+				    String message = cursor.getString(1);
+				    messages.add(new Message(contactid, eventid, message));
+			 } while (cursor.moveToNext());
+		 }
+		return messages;
+	}
+	
 	public long insertMember(Contact contact, Group group) throws Exception {
 		ContentValues content = new ContentValues();
 		content.put("contactId", contact.get_id());
@@ -377,6 +400,8 @@ public class DAL {
 	public boolean deleteEvent(Event _event) {
 	    return _db.delete("events", "_id=?",new String[] { _event.get_id().toString() }) != 0;
 	}
+	
+	
 
 	/*
 	public boolean update(ITodoItem todoItem) {

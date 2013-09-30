@@ -38,6 +38,38 @@ public class PushEvent {
 			this.contact = contact;
 		}
 	}
+	
+	public class MessageParcel {
+		private String _contact;
+		private String _event;
+		private String _message;
+		
+		public MessageParcel(String contact, String event, String message) {
+			_contact = contact;
+			_event = event;
+			_message = message;
+		}
+		
+		public String get_contact() {
+			return _contact;
+		}
+		public void set_contactid(String contact) {
+			this._contact = contact;
+		}
+		public String get_event() {
+			return _event;
+		}
+		public void set_eventid(String event) {
+			this._event = event;
+		}
+		public String get_message() {
+			return _message;
+		}
+		public void set_message(String message) {
+			this._message = message;
+		} 
+
+	}
 
 	private String _title;
 	private String _description;
@@ -124,6 +156,14 @@ public class PushEvent {
 		if (what.equals(EventManager.MAYBE)) msg.setAtt(Attending.MAYBE);
 		if (what.equals(EventManager.NOT_COMING)) msg.setAtt(Attending.NO);
 		push(ParseProxy.PushType.UpdateAttendance, msg, msg.getContact()+" says: "+msg.getEvent()+"? "+what);
+	}
+
+	public void SendMessage(String tweet) throws Exception {
+		String from = ParseUser.getCurrentUser().getUsername();
+		Message message = new Message(DAL.Instance().readContact(from).get_id(),_event.get_id(), tweet);
+		DAL.Instance().insertMessage(message);
+		MessageParcel parcel = new MessageParcel(from, _event.get_title(), tweet);
+		push(ParseProxy.PushType.Tweet, parcel, from+": "+tweet);
 	}
 	
 }
