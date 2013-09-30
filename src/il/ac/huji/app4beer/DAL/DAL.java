@@ -374,6 +374,10 @@ public class DAL {
 		return members;
 	}
 
+	public boolean deleteEvent(Event _event) {
+	    return _db.delete("events", "_id=?",new String[] { _event.get_id().toString() }) != 0;
+	}
+
 	/*
 	public boolean update(ITodoItem todoItem) {
 		try {

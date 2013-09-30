@@ -97,7 +97,7 @@ public class CreateEventActivity extends Activity {
         {
 			@Override
 			public void onDateSet(DatePicker arg0, int year, int month, int dayOfMonth) {
-				_eventDate.setText(String.format("%02d / %02d / %04d", dayOfMonth, month, year));
+				_eventDate.setText(String.format("%02d / %02d / %04d", dayOfMonth, month+1, year));
 				_dateSet = true;
 				_calendar.set(year, month, dayOfMonth);
 			}

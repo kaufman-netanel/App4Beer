@@ -204,6 +204,10 @@ public class EventManager extends Activity {
 					contact.set_attending(att);
 					try {
 						DAL.Instance().updateParticipant(contact, _event);
+						if (att==Attending.NO) {
+							DAL.Instance().deleteEvent(_event);
+							finish();
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
