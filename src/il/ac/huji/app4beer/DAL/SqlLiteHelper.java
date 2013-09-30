@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	public SqlLiteHelper(Context context) {
-	    super(context, "app4beer_db", null, 10);
+	    super(context, "app4beer_db", null, 11);
 	}
 	
 	@Override
@@ -21,11 +21,11 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	    
 	    db.execSQL("create table groups ( " +
 		  	      "_id integer primary key autoincrement, " +
-		  	      "name string);");
+		  	      "name string unique);");
 	   
 	    db.execSQL("create table contacts ( " +
 		  	      "_id integer primary key autoincrement, " +
-		  	      "name string, phone string);");
+		  	      "name string unique, phone string);");
 	    
 	    db.execSQL("create table participants ( " +
 		  	      "contactid integer, " +
@@ -47,7 +47,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 			db.execSQL("drop table IF EXISTS "+tables[i]+";");
 		}
 		onCreate(db);
-		addContacts(db);
+		//addContacts(db);
 		
 	}
 

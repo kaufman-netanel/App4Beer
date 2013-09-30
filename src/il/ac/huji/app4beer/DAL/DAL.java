@@ -2,6 +2,7 @@ package il.ac.huji.app4beer.DAL;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -15,16 +16,15 @@ import android.preference.PreferenceManager;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SignUpCallback;
 
 public class DAL {
 	
-	private static final String ParseApplication = "WK71gB5ZUn0MvUrePNzxVNStnKZBMfUdP6PGwFft";
-	private static final String ClientKey = "eWxzNLLcg80vLUrxo8h3mWdtHUFFirqPJy7ljaLf";
-
 	SqlLiteHelper _sqlLiteHelper;
 	private SQLiteDatabase _db;
 	private SharedPreferences _preferences;
@@ -44,7 +44,8 @@ public class DAL {
 		_preferences = PreferenceManager.getDefaultSharedPreferences(context);
 	    _sqlLiteHelper = new SqlLiteHelper(context);
 	    _db = _sqlLiteHelper.getWritableDatabase();
-	    Parse.initialize(context, ParseApplication, ClientKey);
+	    ParseProxy.Init(context);
+	    refreshContacts();
 	}
 	
 	public Boolean IsSignedIn() {
@@ -230,6 +231,19 @@ public class DAL {
 	    } catch (Exception e){
 	    	return false;
 	    }
+	}
+
+	public void refreshContacts() {
+		List<String> users = ParseProxy.Users();
+		Iterator<String> i = users.iterator();
+		while (i.hasNext()) {
+			String user = i.next();
+			try {
+				insertContact(new Contact(user, "",-1));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}
 	}
 	
 	public Contact readContact(String name) {
