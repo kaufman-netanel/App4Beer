@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.parse.ParseUser;
+
 public class PushEvent {
 	
 	private String _title;
@@ -48,6 +50,13 @@ public class PushEvent {
 	}
 
 	public void persist() throws Exception {
+		if (_event == null) {
+			_event = new Event(-1, _title, _description, _location, _date);
+			Iterator<String> i = _contacts.iterator();
+			while (i.hasNext()) {
+				_event.add_contact(DAL.Instance().readContact(i.next()).get_id());
+			}
+		}
 		long eventId = DAL.Instance().insertEvent(_event);
 		_event.set_id((int)eventId);
 		DAL.Instance().updateParticipant(_owner, _event);
@@ -61,7 +70,16 @@ public class PushEvent {
 		}
 	}
 
+	
+	
 	public void push() {
-//		ParseProxy.Push("foo", this);
+		Iterator<String> i = _contacts.iterator();
+		String from = ParseUser.getCurrentUser().getUsername();
+		while (i.hasNext()) {
+			String to = i.next();
+			if (from!=to) {
+				ParseProxy.Push(to, ParseProxy.PushType.NewEvent, this, from+" created "+_event.get_title());
+			}
+		}
 	}
 }

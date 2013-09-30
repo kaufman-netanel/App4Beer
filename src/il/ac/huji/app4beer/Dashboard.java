@@ -2,11 +2,15 @@ package il.ac.huji.app4beer;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
 import il.ac.huji.app4beer.DAL.ParseProxy;
+import il.ac.huji.app4beer.DAL.ParseProxy.PushEnvelope;
+import il.ac.huji.app4beer.DAL.PushEvent;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -34,7 +38,7 @@ public class Dashboard extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
 		
-		String json = ParseProxy.getTheJSON(getIntent());
+		handlePushNotifications();
 		
 		Button createEventButton = (Button)findViewById(R.id.create_event_btn);
 		createEventButton.setOnClickListener(new OnClickListener() {
@@ -59,6 +63,24 @@ public class Dashboard extends Activity {
         });
 
 
+	}
+
+	private void handlePushNotifications() {
+		PushEnvelope env = ParseProxy.getTheEvelope(getIntent());
+		if (env == null) return;
+		switch (env.getType()) {
+		case NewEvent:
+			Gson gson = new Gson();
+			PushEvent pEvent = gson.fromJson(env.getMessage(), PushEvent.class);
+			try {
+				pEvent.persist();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+		
+		
 	}
 
 	@Override
