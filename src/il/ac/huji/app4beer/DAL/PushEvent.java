@@ -64,6 +64,7 @@ public class PushEvent {
 		Iterator<Integer> groupsIt = event.get_groups().iterator();
 		while (groupsIt.hasNext()) {
 			List<Contact> members = DAL.Instance().Members(groupsIt.next());
+			if (members==null) continue;
 			Iterator<Contact> membersIt = members.iterator();
 			while (membersIt.hasNext()) {
 				Contact member = membersIt.next();
