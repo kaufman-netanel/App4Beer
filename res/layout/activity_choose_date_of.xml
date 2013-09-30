@@ -23,13 +23,13 @@
         android:gravity="center" >
 
         <Button
-            android:id="@+id/date_picker_ok_btn"
+            android:id="@+id/att_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ok" />
 
         <Button
-            android:id="@+id/date_picker_cancel_btn"
+            android:id="@+id/att_maybe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel" />

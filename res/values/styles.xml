@@ -30,7 +30,7 @@
 	    <item name="android:shadowRadius">2</item>
 	</style>
 	<style name="ButtonBlueBg">
-	    <item name="android:background">#1e90ff</item>
+	    <item name="android:background">#1e90aa</item>
    	    <item name="android:textColor">#ffffff</item>
 	</style>
 </resources>

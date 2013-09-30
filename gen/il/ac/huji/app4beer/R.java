@@ -50,14 +50,16 @@ public final class R {
         public static final int LinearLayout2=0x7f08001a;
         public static final int RelativeLayout1=0x7f080035;
         public static final int action_settings=0x7f080040;
+        public static final int att_maybe=0x7f080009;
+        public static final int att_no=0x7f080021;
+        public static final int att_so=0x7f080022;
+        public static final int att_yes=0x7f080008;
         public static final int attendBtn=0x7f080029;
         public static final int attendingRadioMaybe=0x7f080003;
         public static final int attendingRadioNo=0x7f080004;
         public static final int attendingRadioYes=0x7f080002;
         public static final int attending_status_cancel_btn=0x7f080006;
         public static final int attending_status_ok_btn=0x7f080005;
-        public static final int button3=0x7f080021;
-        public static final int button4=0x7f080022;
         public static final int chat_content=0x7f080039;
         public static final int chat_time=0x7f080038;
         public static final int chat_user=0x7f080037;
@@ -67,8 +69,6 @@ public final class R {
         public static final int createEventLayout=0x7f080011;
         public static final int createNewGroupBtn=0x7f08000a;
         public static final int create_event_btn=0x7f080019;
-        public static final int date_picker_cancel_btn=0x7f080009;
-        public static final int date_picker_ok_btn=0x7f080008;
         public static final int date_picker_value=0x7f080007;
         public static final int displayname=0x7f08002e;
         public static final int edit_group_image_button=0x7f08003e;

@@ -106,10 +106,10 @@ public class DAL {
 		 }
 	}
 
-	public ArrayList<Contact> Participants(Integer eventId) {
+	public ArrayList<Contact> Participants(Integer eventId, Integer attendingType) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
-		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id, participants.soure, participants.attending FROM participants INNER JOIN contacts ON members.contactId=participants.contactid WHERE participants.eventid=? ";
-		Cursor cursor = _db.rawQuery(QUERY, new String[]{eventId.toString()});
+		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id, participants.source, participants.attending FROM participants INNER JOIN contacts ON contacts._id=participants.contactid WHERE participants.eventid=? AND participants.attending=?";
+		Cursor cursor = _db.rawQuery(QUERY, new String[]{eventId.toString(), attendingType.toString()});
 		 if (cursor.moveToFirst()) {
 			 do {
 			    String name= cursor.getString(0);

@@ -15,7 +15,7 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 
 	private static final int SignIn = 42;
-	private static final long Delay = 2000;
+	private static final long Delay = 0;
 	private long _uptimeMillis;
 
 	class myAsyncTask extends AsyncTask<Void, Void, Void> {

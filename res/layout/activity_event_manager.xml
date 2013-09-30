@@ -3,6 +3,7 @@
     android:id="@+id/FrameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="15dp"
     tools:context=".EventManager" >
 
     <ImageButton
@@ -25,37 +26,39 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/date_picker_ok_btn"
+                android:id="@+id/att_yes"
                 style="@style/ButtonBlueBg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
                 android:text="Yes"
                 android:textSize="14sp" />
 
             <Button
-                android:id="@+id/date_picker_cancel_btn"
+                android:id="@+id/att_maybe"
                 style="@style/ButtonBlueBg"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Maybe"
                 android:textSize="14sp" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/att_no"
                 style="@style/ButtonBlueBg"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="No"
                 android:textSize="14sp" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/att_so"
                 style="@style/ButtonBlueBg"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Pending"
                 android:textSize="14sp" />
