@@ -78,7 +78,7 @@ public class DAL {
 		
 	private List<Event> Events(String selection) {
 		List<Event> events = new ArrayList<Event>();
-		 Cursor cursor = _db.query("events", new String[] { "name", "description", "date", "_id", "location" }, selection, null, null, null, null);
+		 Cursor cursor = _db.query("events", new String[] { "name", "description", "date", "_id", "location", "owner" }, selection, null, null, null, null);
 		 if (cursor.moveToFirst()) {
 			 do {
 			    String name = cursor.getString(0);
@@ -86,7 +86,9 @@ public class DAL {
 			    Date date = cursor.getLong(2)==0 ? null : new Date(cursor.getLong(2));
 			    Integer id = cursor.getInt(3);
 			    String location = cursor.getString(4);
+			    Integer owner = cursor.getInt(5);
 			    Event event = new Event(id, name, description, location, date);
+			    event.set_owner(DAL.Instance().readContact(owner));
 			    addEventParticipants(event);
 			    addEventGroups(event);
 			    events.add(event);
@@ -200,7 +202,8 @@ public class DAL {
 			content.put("description", event.get_description());
 			content.put("location", event.get_location());
 	    	content.put("date", event.get_date().getTime());
-		    id = _db.insert("events", null, content) ;
+			content.put("owner", event.get_owner().get_id());
+			id = _db.insert("events", null, content) ;
 		    if (id  == -1) throw new Exception();
 		    
 		    event.set_id((int)id);

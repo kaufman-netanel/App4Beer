@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.parse.ParseUser;
+
 import il.ac.huji.app4beer.Adapters.CustomContactsAdapter;
 import il.ac.huji.app4beer.Adapters.CustomGroupAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
@@ -35,10 +37,12 @@ public class EventManager extends Activity {
 	private TextView _eventLocationTextView;
 	private TextView _eventDateTextView;
 	private TextView _eventTimeTextView;
+	private Button _attendButton;
 	private List<Button> _buttons;
 	private List<List<Contact>> _contacts; 
 	private List<ArrayAdapter<Contact>> _contactsAdapter;
 	private List<CustomPopup> _popUps;
+	private Boolean _myEvent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class EventManager extends Activity {
 		_eventLocationTextView = (TextView)findViewById(R.id.EventManager_location);
 		_eventDateTextView = (TextView)findViewById(R.id.EventManager_date);
 		_eventTimeTextView = (TextView)findViewById(R.id.EventManager_time);
+		_attendButton = (Button)findViewById(R.id.attendBtn);
 		
 		_eventTitleTextView.setText(_event.get_title());
 		_eventDescriptionTextView.setText(_event.get_description());
@@ -75,6 +80,12 @@ public class EventManager extends Activity {
 			_contactsAdapter.add(new CustomContactsAdapter(this, c, false, false));
 			_popUps.add(new CustomPopup(this, _buttons.get(i), _contactsAdapter.get(i)));
 		}
+		
+		_myEvent = 
+		if (_event.get_owner().get_name().compareTo(ParseUser.getCurrentUser().getUsername()==0) {
+			
+		}
+		
 
 	}
 

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	public SqlLiteHelper(Context context) {
-	    super(context, "app4beer_db", null, 12);
+	    super(context, "app4beer_db", null, 13);
 	}
 	
 	@Override
@@ -16,6 +16,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		  	      "_id integer primary key autoincrement, " +
 		  	      "date integer, " +
 		  	      "name string, " +
+		  	      "owner integer, " +
 		  	      "location string, " +
 		  	      "description string);");
 	    
@@ -47,15 +48,6 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 			db.execSQL("drop table IF EXISTS "+tables[i]+";");
 		}
 		onCreate(db);
-		//addContacts(db);
-		
-	}
-
-	private void addContacts(SQLiteDatabase db) {
-		String contacts[] = {"Roger", "Pete", "John", "Keith"};
-		for (int i=0;i<contacts.length;i++) {
-			db.execSQL("INSERT INTO contacts (name, phone) VALUES ('" + contacts[i] + "','" + i +"');");
-		}
 	}
 
 }
