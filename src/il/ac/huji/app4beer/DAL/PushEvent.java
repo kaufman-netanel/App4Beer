@@ -52,6 +52,7 @@ public class PushEvent {
 	public void persist() throws Exception {
 		if (_event == null) {
 			_event = new Event(-1, _title, _description, _location, _date);
+			_event.set_owner(DAL.Instance().readContact(_owner.get_id()));
 			Iterator<String> i = _contacts.iterator();
 			while (i.hasNext()) {
 				_event.add_contact(DAL.Instance().readContact(i.next()).get_id());
@@ -77,9 +78,8 @@ public class PushEvent {
 		String from = ParseUser.getCurrentUser().getUsername();
 		while (i.hasNext()) {
 			String to = i.next();
-			if (from!=to) {
-				ParseProxy.Push(to, ParseProxy.PushType.NewEvent, this, from+" created "+_event.get_title());
-			}
+			if (from.compareTo(to)==0) continue;
+			ParseProxy.Push(to, ParseProxy.PushType.NewEvent, this, from+" created "+_event.get_title());
 		}
 	}
 }

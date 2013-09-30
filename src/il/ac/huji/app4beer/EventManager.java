@@ -81,9 +81,18 @@ public class EventManager extends Activity {
 			_popUps.add(new CustomPopup(this, _buttons.get(i), _contactsAdapter.get(i)));
 		}
 		
-		_myEvent = 
-		if (_event.get_owner().get_name().compareTo(ParseUser.getCurrentUser().getUsername()==0) {
-			
+		_myEvent = _event.get_owner().get_name().compareTo(ParseUser.getCurrentUser().getUsername())==0;
+		if (_myEvent) {
+			_attendButton.setVisibility(View.GONE);
+		} else {
+			_attendButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		}
 		
 
