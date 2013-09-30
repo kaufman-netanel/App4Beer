@@ -82,7 +82,8 @@ public class Dashboard extends Activity {
 			PushEvent.Attendance att = gson.fromJson(env.getMessage(), PushEvent.Attendance.class);
 			try {
 				Contact contact = DAL.Instance().readContact(att.getContact());
-				Event event = DAL.Instance().readEvent(att.getContact());
+				contact.set_attending(att.getAtt());
+				Event event = DAL.Instance().readEvent(att.getEvent());
 				DAL.Instance().updateParticipant(contact, event);
 			} catch (Exception e) {
 				e.printStackTrace();
