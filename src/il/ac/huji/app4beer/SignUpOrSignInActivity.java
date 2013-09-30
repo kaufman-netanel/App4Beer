@@ -4,6 +4,7 @@ import il.ac.huji.app4beer.DAL.DAL;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -91,6 +92,11 @@ public class SignUpOrSignInActivity extends Activity {
 				user.signUpInBackground(new SignUpCallback(){
 					@Override
 					public void done(ParseException e) {
+						if (e==null) {
+							ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+							installation.put("username", _displayname.getText().toString());
+							installation.saveInBackground();
+						}
 						onDone(null, e, "SIGNED UP");
 					}
 				});

@@ -246,6 +246,11 @@ public class DAL {
 		}
 	}
 	
+	public String readContact(Integer id) {
+		List<Contact> contacts = Contacts("_id='"+id+"'");
+		return contacts.size()==0?null:contacts.get(0).get_name();
+	}
+
 	public Contact readContact(String name) {
 		List<Contact> contacts = Contacts("name='"+name+"'");
 		return contacts.size()==0?null:contacts.get(0);
@@ -296,14 +301,17 @@ public class DAL {
 	    	return false;
 	    }
 	}
-
 	public List<Contact> Members(Group group) {
-		List<Contact> members = new ArrayList<Contact>();
 		if (group == null) {
-			return members;
+			return new ArrayList<Contact>();
 		}
+		return Members(group.get_id());
+	}
+
+	public List<Contact> Members(Integer groupId) {
+		List<Contact> members = new ArrayList<Contact>();
 		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id FROM members INNER JOIN contacts ON members.contactId=contacts._id WHERE members.groupId=? ";
-		Cursor cursor = _db.rawQuery(QUERY, new String[]{group.get_id().toString()});
+		Cursor cursor = _db.rawQuery(QUERY, new String[]{groupId.toString()});
 		if (cursor.moveToFirst()) {
 			 do {
 				    String name = cursor.getString(0);

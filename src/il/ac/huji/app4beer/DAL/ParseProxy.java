@@ -1,20 +1,27 @@
 package il.ac.huji.app4beer.DAL;
 
-import il.ac.huji.app4beer.MainActivity;
+import il.ac.huji.app4beer.Dashboard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.google.gson.Gson;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
+import com.parse.SendCallback;
 
 public class ParseProxy {
 
@@ -23,7 +30,7 @@ public class ParseProxy {
 
 	public static void Init(Context context) {
 	    Parse.initialize(context, ParseApplication, ClientKey);
-	    PushService.setDefaultPushCallback(context, MainActivity.class);
+	    PushService.setDefaultPushCallback(context, Dashboard.class);
 	    ParseInstallation.getCurrentInstallation().saveInBackground();
 	}
 
@@ -40,6 +47,42 @@ public class ParseProxy {
 			e.printStackTrace();
 		}
 		return users;
+	}
+	
+	static public void Push(String to, Object what) {
+		ParseQuery pushQuery = ParseInstallation.getQuery();
+		pushQuery.whereEqualTo("username", to);
+		// Send push notification to query
+		ParsePush push = new ParsePush();
+		push.setQuery(pushQuery); // Set our Installation query
+		push.setMessage("yipy!");
+		try {
+			Gson gson = new Gson();
+			String json = gson.toJson(what);
+			JSONObject data = new JSONObject(json);
+			data.accumulate("alert", "wow");
+//			JSONObject data = new JSONObject("{\"alert\": \"BOOO\", \"name\": \"Vaughn\", \"newsItem\": \"Man bites dog\"}");
+			push.setData(data);
+			push.sendInBackground(new SendCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				if (e!=null) {
+					e.printStackTrace();					
+				}				
+			}
+		});
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	static public String getTheJSON(Intent intent) {
+		Bundle extras = intent.getExtras();
+		if (extras==null) return null;
+		String jsonData = extras.getString( "com.parse.Data" );
+		return jsonData;
 	}
 		
 }

@@ -6,6 +6,7 @@ import il.ac.huji.app4beer.Adapters.CustomEventAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
+import il.ac.huji.app4beer.DAL.ParseProxy;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class Dashboard extends Activity {
 
@@ -31,6 +33,9 @@ public class Dashboard extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
+		
+		String json = ParseProxy.getTheJSON(getIntent());
+		if (json!=null) Toast.makeText(getApplicationContext(), json, Toast.LENGTH_LONG).show();
 		
 		Button createEventButton = (Button)findViewById(R.id.create_event_btn);
 		createEventButton.setOnClickListener(new OnClickListener() {

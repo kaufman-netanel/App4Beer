@@ -3,8 +3,10 @@ package il.ac.huji.app4beer;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
+import il.ac.huji.app4beer.DAL.ParseProxy;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -62,9 +64,11 @@ public class CreateEventActivity extends Activity {
   			      return;
     			}
     			try {
-	    			DAL.Instance().insertEvent(new Event(eventName.getText().toString(),
+    				Event event = new Event(eventName.getText().toString(),
 							eventDescription.getText().toString(), eventLocation.getText().toString(),
-							_calendar.getTime(), _contacts, _groups));
+							_calendar.getTime(), _contacts, _groups);
+	    			DAL.Instance().insertEvent(event);
+	    			ParseProxy.Push("foo", event);
 		    		setResult(RESULT_OK);
 		    		finish();
     			} catch (Exception e) {
