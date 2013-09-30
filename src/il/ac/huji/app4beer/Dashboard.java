@@ -35,7 +35,6 @@ public class Dashboard extends Activity {
 		setContentView(R.layout.activity_dashboard);
 		
 		String json = ParseProxy.getTheJSON(getIntent());
-		if (json!=null) Toast.makeText(getApplicationContext(), json, Toast.LENGTH_LONG).show();
 		
 		Button createEventButton = (Button)findViewById(R.id.create_event_btn);
 		createEventButton.setOnClickListener(new OnClickListener() {

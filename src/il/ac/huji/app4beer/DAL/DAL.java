@@ -108,9 +108,25 @@ public class DAL {
 	}
 
 	public ArrayList<Contact> Participants(Integer eventId, Integer attendingType) {
+		return Participants(eventId, attendingType, null);
+	}
+	
+	public ArrayList<Contact> Participants(Integer eventId, Integer attendingType, Integer contactId) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
-		final String QUERY = "SELECT contacts.name, contacts.phone, contacts._id, participants.source, participants.attending FROM participants INNER JOIN contacts ON contacts._id=participants.contactid WHERE participants.eventid=? AND participants.attending=?";
-		Cursor cursor = _db.rawQuery(QUERY, new String[]{eventId.toString(), attendingType.toString()});
+		String QUERY = "SELECT contacts.name, contacts.phone, contacts._id, participants.source, participants.attending FROM participants INNER JOIN contacts ON contacts._id=participants.contactid WHERE participants.eventid=?";
+		String[] strings;
+		if (contactId==null) {
+			QUERY = QUERY.concat(" AND participants.attending=?");
+			strings = new String[]{
+						eventId.toString(), 
+						attendingType.toString()};
+		} else {
+			QUERY = QUERY.concat(" AND contacts._id=?");
+			strings = new String[]{
+					eventId.toString(), 
+					contactId.toString()};
+		}
+		Cursor cursor = _db.rawQuery(QUERY, strings);
 		 if (cursor.moveToFirst()) {
 			 do {
 			    String name= cursor.getString(0);
@@ -127,16 +143,39 @@ public class DAL {
 		 return contacts;
 	}
 	
-	public long insertParticipant(Contact contact) throws Exception {
+
+	public void updateParticipant(Contact contact, Event event) throws Exception {
+		ContentValues content = createParticipantRow(contact, event);
+	    int rows = _db.update(
+	    		"participants", 
+	    		content,
+	    		"contactid=? AND eventid=?",
+	    		new String[] { contact.get_id().toString(), event.get_id().toString() });
+	    if (rows==0) {
+	    	insertParticipant(contact, event);
+	    }
+	}
+	
+	public long insertParticipant(Contact contact, Event event) throws Exception {
 		if (readContact(contact.get_name())==null) {
 			insertContact(contact);
 		}
-		ContentValues content = new ContentValues();
-		content.put("name", contact.get_name());
-		content.put("phone", contact.get_phone());
+		if (!Participants(event.get_id(), 0, contact.get_id()).isEmpty()) {
+			return -1;
+		}
+		ContentValues content = createParticipantRow(contact, event);
 	    long id = _db.insert("participants", null, content) ;
 		if (id == -1) throw new Exception();
 		return id;
+	}
+
+	private ContentValues createParticipantRow(Contact contact, Event event) {
+		ContentValues content = new ContentValues();
+		content.put("contactid", contact.get_id());
+		content.put("attending", contact.get_attending());
+		content.put("source", contact.get_source());
+		content.put("eventid", event.get_id());
+		return content;
 	}
 
 	private void addEventGroups(Event event) {
@@ -177,12 +216,12 @@ public class DAL {
 		    
 		    List<Integer> contacts = event.contacts();
 		    if (contacts!=null) {
-			    	for (int i=0;i<contacts.size();i++) {
-					content = new ContentValues();
-					content.put("eventid", event.get_id());
-					content.put("contactid", contacts.get(i));
-				    long status = _db.insert("participants", null, content) ;
-				    if (status == -1) throw new Exception();
+		    	Iterator<Integer> i = contacts.iterator();
+		    	while (i.hasNext()) {
+			    	Contact contact = readContact(i.next());
+			    	contact.set_attending(Contact.Attending.SO);
+			    	contact.set_source(Contact.Source.CONTACTS);
+			    	insertParticipant(contact, event);
 			    }
 		    }
 		    
@@ -246,9 +285,9 @@ public class DAL {
 		}
 	}
 	
-	public String readContact(Integer id) {
+	public Contact readContact(Integer id) {
 		List<Contact> contacts = Contacts("_id='"+id+"'");
-		return contacts.size()==0?null:contacts.get(0).get_name();
+		return contacts.size()==0?null:contacts.get(0);
 	}
 
 	public Contact readContact(String name) {

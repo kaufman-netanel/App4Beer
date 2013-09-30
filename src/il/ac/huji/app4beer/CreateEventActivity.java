@@ -3,10 +3,13 @@ package il.ac.huji.app4beer;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.parse.ParseUser;
+
 import il.ac.huji.app4beer.DAL.Contact;
 import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Event;
 import il.ac.huji.app4beer.DAL.ParseProxy;
+import il.ac.huji.app4beer.DAL.PushEvent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -39,7 +42,6 @@ public class CreateEventActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_event);
-	
 		
 		createDateTime();
 		initCreateEventButton();	 
@@ -55,7 +57,6 @@ public class CreateEventActivity extends Activity {
             	EditText eventDescription = (EditText)findViewById(R.id.eventDescription);
             	EditText eventLocation= (EditText)findViewById(R.id.eventLocation);
             	Calendar c = Calendar.getInstance();
-            	Boolean before = _calendar.before(Calendar.getInstance());
     			if(eventName.getText().length() == 0 || 
     				eventDescription.getText().length() == 0 ||
     				!_dateSet || 
@@ -67,11 +68,17 @@ public class CreateEventActivity extends Activity {
     				Event event = new Event(eventName.getText().toString(),
 							eventDescription.getText().toString(), eventLocation.getText().toString(),
 							_calendar.getTime(), _contacts, _groups);
-	    			DAL.Instance().insertEvent(event);
-	    			ParseProxy.Push("foo", event);
+    				Contact owner = DAL.Instance().readContact(ParseUser.getCurrentUser().getUsername());
+    				owner.set_source(Contact.Source.OWNER);
+    				owner.set_attending(Contact.Attending.YES);
+    				event.set_owner(owner);
+    				PushEvent pEvent = new PushEvent(event);
+    				pEvent.persist();
+    				pEvent.push();    				
 		    		setResult(RESULT_OK);
 		    		finish();
     			} catch (Exception e) {
+    				e.printStackTrace();
     			}
             }
         });

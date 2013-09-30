@@ -11,6 +11,7 @@ public class Event {
 	private String _location;
 	private Date _date;
 	private Integer _id;
+	private Contact _owner;
 	private ArrayList<Integer> _contacts;
 	private ArrayList<Integer> _groups;
 	
@@ -92,6 +93,14 @@ public class Event {
 
 	public void set_location(String _location) {
 		this._location = _location;
+	}
+
+	public Contact get_owner() {
+		return _owner;
+	}
+
+	public void set_owner(Contact contact) {
+		this._owner = contact;
 	}
 
 }
