@@ -10,8 +10,11 @@ import com.parse.ParseUser;
 import il.ac.huji.app4beer.Adapters.CustomContactsAdapter;
 import il.ac.huji.app4beer.Adapters.CustomGroupAdapter;
 import il.ac.huji.app4beer.DAL.Contact;
+import il.ac.huji.app4beer.DAL.Contact.Attending;
 import il.ac.huji.app4beer.DAL.Event;
 import il.ac.huji.app4beer.DAL.DAL;
+import il.ac.huji.app4beer.DAL.ParseProxy;
+import il.ac.huji.app4beer.DAL.PushEvent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +24,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -43,6 +48,7 @@ public class EventManager extends Activity {
 	private List<ArrayAdapter<Contact>> _contactsAdapter;
 	private List<CustomPopup> _popUps;
 	private Boolean _myEvent;
+	private AttendCustomPopup _attendCustomPopup;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +91,7 @@ public class EventManager extends Activity {
 		if (_myEvent) {
 			_attendButton.setVisibility(View.GONE);
 		} else {
-			_attendButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
+			_attendCustomPopup = new AttendCustomPopup(this, _attendButton);
 		}
 		
 
@@ -140,6 +139,68 @@ public class EventManager extends Activity {
 			list.setLayoutParams(params);
 			list.setBackgroundColor(0xff2eccee);
 			list.setPadding(5, 5, 5, 5);
+			_popup.setBackgroundDrawable(null);
+			_popup.setContentView(list);
+		}
+	
+	}
+	
+	public static final String NOT_COMING = "Not coming.";
+	public static final String MAYBE = "Maybe...";
+	public static final String OF_COURSE = "Of course!";
+
+	private class AttendCustomPopup {
+		private Boolean _click = true;
+		private PopupWindow _popup;
+		private Button _button;
+		private ArrayAdapter<String> _adapter;
+		private ArrayList<String> _what;
+		
+		public AttendCustomPopup (Context context, Button button) {
+			
+			_what = new ArrayList<String>();
+			_what.add(OF_COURSE);
+			_what.add(MAYBE);
+			_what.add(NOT_COMING);
+			_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, _what); 
+			_button = button;
+			_popup = new PopupWindow(context);
+			_button.setOnClickListener(new OnClickListener() {
+
+				@Override
+	            public void onClick(View v) {
+	                if (_click) {
+	                	_popup.showAsDropDown(_button);
+	                	_popup.update(_button, -(250-_button.getWidth())/2, 0, 250, 300);
+	                	_click = false;
+	                } else {
+	                	_popup.dismiss();
+	                	_click = true;
+	                }
+	            }
+				
+	        });
+			final ListView list = new ListView(context);
+	        list.setAdapter(_adapter);
+			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			list.setLayoutParams(params);
+			list.setBackgroundColor(0xff2eccee);
+			list.setPadding(5, 5, 5, 5);
+			list.setItemsCanFocus(true);
+			list.setClickable(true);
+			list.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					PushEvent pEvent = new PushEvent(_event);
+					String what = (String) list.getItemAtPosition(position);
+					pEvent.updateAttendance(what);
+                	_popup.dismiss();
+                	_click = true;
+
+				}
+			});
+			_popup.setFocusable(true);
 			_popup.setBackgroundDrawable(null);
 			_popup.setContentView(list);
 		}

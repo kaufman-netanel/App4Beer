@@ -1,5 +1,9 @@
 package il.ac.huji.app4beer.DAL;
 
+import il.ac.huji.app4beer.EventManager;
+import il.ac.huji.app4beer.DAL.Contact.Attending;
+import il.ac.huji.app4beer.DAL.ParseProxy.PushType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -11,6 +15,30 @@ import com.parse.ParseUser;
 
 public class PushEvent {
 	
+	public class Attendance {
+		private String contact;
+		private String event;
+		private int att;
+		public int getAtt() {
+			return att;
+		}
+		public void setAtt(int att) {
+			this.att = att;
+		}
+		public String getEvent() {
+			return event;
+		}
+		public void setEvent(String event) {
+			this.event = event;
+		}
+		public String getContact() {
+			return contact;
+		}
+		public void setContact(String contact) {
+			this.contact = contact;
+		}
+	}
+
 	private String _title;
 	private String _description;
 	private String _location;
@@ -74,12 +102,27 @@ public class PushEvent {
 	
 	
 	public void push() {
+		push(ParseProxy.PushType.NewEvent, this, ParseUser.getCurrentUser().getUsername()+" created "+_event.get_title());
+	}
+
+	public void push(PushType type, Object what, String alert) {
 		Iterator<String> i = _contacts.iterator();
 		String from = ParseUser.getCurrentUser().getUsername();
 		while (i.hasNext()) {
 			String to = i.next();
 			if (from.compareTo(to)==0) continue;
-			ParseProxy.Push(to, ParseProxy.PushType.NewEvent, this, from+" created "+_event.get_title());
+			ParseProxy.Push(to, type, what, alert);
 		}
 	}
+
+	public void updateAttendance(String what) {
+		Attendance msg = new Attendance();
+		msg.setContact(ParseUser.getCurrentUser().getUsername());
+		msg.setEvent(_event.get_title());
+		if (what.equals(EventManager.OF_COURSE)) msg.setAtt(Attending.YES);
+		if (what.equals(EventManager.MAYBE)) msg.setAtt(Attending.MAYBE);
+		if (what.equals(EventManager.NOT_COMING)) msg.setAtt(Attending.NO);
+		push(ParseProxy.PushType.UpdateAttendance, msg, msg.getContact()+" say: "+msg.getEvent()+"? "+what);
+	}
+	
 }

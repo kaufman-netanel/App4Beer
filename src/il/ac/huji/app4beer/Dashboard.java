@@ -68,12 +68,22 @@ public class Dashboard extends Activity {
 	private void handlePushNotifications() {
 		PushEnvelope env = ParseProxy.getTheEvelope(getIntent());
 		if (env == null) return;
+		Gson gson = new Gson();
 		switch (env.getType()) {
 		case NewEvent:
-			Gson gson = new Gson();
 			PushEvent pEvent = gson.fromJson(env.getMessage(), PushEvent.class);
 			try {
 				pEvent.persist();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case UpdateAttendance:
+			PushEvent.Attendance att = gson.fromJson(env.getMessage(), PushEvent.Attendance.class);
+			try {
+				Contact contact = DAL.Instance().readContact(att.getContact());
+				Event event = DAL.Instance().readEvent(att.getContact());
+				DAL.Instance().updateParticipant(contact, event);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

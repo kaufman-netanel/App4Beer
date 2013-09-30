@@ -4,7 +4,7 @@
     <string name="app_name">App4Beer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_dash">Dash</string>
+    <string name="title_activity_dash">My events</string>
     <string name="create_event">Create Event</string>
     <string name="title_activity_create_event">CreateEventActivity</string>
     <string name="event_name_hint">Event name...</string>

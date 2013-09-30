@@ -72,6 +72,11 @@ public class DAL {
 		return events.size()==0?null:events.get(0);
 	}
 
+	public Event readEvent(String name) {
+		List<Event> events = Events("name='"+name+"'");
+		return events.size()==0?null:events.get(0);
+	}
+
 	public List<Event> Events() {
 		return Events(null);
 	}
