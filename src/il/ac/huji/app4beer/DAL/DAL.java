@@ -203,6 +203,8 @@ public class DAL {
 		    id = _db.insert("events", null, content) ;
 		    if (id  == -1) throw new Exception();
 		    
+		    event.set_id((int)id);
+		    
 		    List<Integer> groups = event.groups();
 		    if (groups!=null) {
 			    for (int i=0;i<groups.size();i++) {
