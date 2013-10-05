@@ -22,10 +22,13 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -149,24 +152,35 @@ public class EventManager extends Activity {
 			_adapter = adapter;
 			_button = button;
 			_popup = new PopupWindow(context);
+			_popup.setTouchable(true);    
+			_popup.setFocusable(false);    
+			_popup.setOutsideTouchable(true);
+			_popup.setTouchInterceptor(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					if (arg1.getAction() == MotionEvent.ACTION_OUTSIDE) {
+						_popup.dismiss();
+						_button.setTextColor(0xffffffff);
+						_button.setBackgroundColor(0xff1e90aa);
+						return true;
+		            }
+		            return false;
+				}
+			});
 			_button.setOnClickListener(new OnClickListener() {
 
 				@Override
 	            public void onClick(View v) {
 	                if (_click) {
-	                	_popup.showAsDropDown(_button);
-	                	_popup.update(_button, -(200-_button.getWidth())/2, 0, 200, 200);
 	                	_click = false;
-	                	_button.setTextColor(0xff000000);
-	                	_button.setBackgroundColor(0xff2eccee);
+                		_popup.showAsDropDown(_button);
+                		_popup.update(_button, -(200-_button.getWidth())/2, 0, 200, 200);
+                		_button.setTextColor(0xff000000);
+                		_button.setBackgroundColor(0xff2eccee);
 	                } else {
-	                	_popup.dismiss();
-	                	_click = true;
-	                	_button.setTextColor(0xffffffff);
-	                	_button.setBackgroundColor(0xff1e90aa);
+	                	_click = true;	                	
 	                }
 	            }
-				
 	        });
 			ListView list = new ListView(context);
 	        list.setAdapter(_adapter);
@@ -174,7 +188,7 @@ public class EventManager extends Activity {
 			list.setLayoutParams(params);
 			list.setBackgroundColor(0xff2eccee);
 			list.setPadding(5, 5, 5, 5);
-			_popup.setBackgroundDrawable(null);
+			_popup.setBackgroundDrawable(new BitmapDrawable());
 			_popup.setContentView(list);
 		}
 	
