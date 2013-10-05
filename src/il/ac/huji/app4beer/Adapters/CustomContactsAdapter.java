@@ -41,9 +41,8 @@ public class CustomContactsAdapter extends ArrayAdapter<Contact> {
 		if (contact!=null) {
 			name.setText(contact.get_name());
 		}
-		//name.setClickable(_checkable);
+		name.setClickable(_defaultChecked);
 		if (_checkable) {
-			//((CheckBox)name).setChecked(_defaultChecked);
 			((CheckBox)name).setChecked(contact.get_selected());
 			((CheckBox)name).setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override

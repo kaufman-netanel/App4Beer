@@ -137,7 +137,7 @@ public class ChooseParticipantsActivity extends Activity {
         	for (int i=0;i<_contacts.size();i++) {
         		if (_selectedContacts.contains(_contacts.get(i).get_id())) _contacts.get(i).set_selected(true);
         	}
-      	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, false, true);
+      	_contactsAdapter =  new CustomContactsAdapter(this, _contacts, true, true);
         	_contactsListView.setAdapter(_contactsAdapter);
         }
 	}

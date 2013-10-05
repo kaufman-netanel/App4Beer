@@ -1,5 +1,6 @@
 package il.ac.huji.app4beer;
 
+import java.util.Iterator;
 import java.util.List;
 
 import il.ac.huji.app4beer.Adapters.CustomContactsAdapter;
@@ -8,14 +9,11 @@ import il.ac.huji.app4beer.DAL.DAL;
 import il.ac.huji.app4beer.DAL.Group;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -32,7 +30,7 @@ public class EditGroupActivity extends Activity {
 	private ArrayAdapter<Contact> _membersAdapter;
 	private List<Contact> _members;
 	private Group _group;
-
+	private Boolean _newgroup;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +41,7 @@ public class EditGroupActivity extends Activity {
 		if (extras != null) {
 			_group = new Group((String) extras.getString("name"),extras.getInt("id", -1));
 		}
-		final Boolean newgroup = _group == null;
+		_newgroup = _group == null;
 
 		_groupDeleteImageButton = (ImageButton)findViewById(R.id.group_delete_btn);
 		_groupOkImageButton = (ImageButton)findViewById(R.id.group_ok);
@@ -67,9 +65,16 @@ public class EditGroupActivity extends Activity {
     			if(_groupNameEditText.getText().length() == 0 ) {
     			      return;
       			}
-    			if (newgroup) {
+    			if (_newgroup) {
     				try {
-						DAL.Instance().insertGroup(new Group(_groupNameEditText.getText().toString(), -1));
+    					_group = new Group(_groupNameEditText.getText().toString(), -1);
+						int id = (int) DAL.Instance().insertGroup(_group);
+						_group.set_id(id);
+						Iterator<Contact> i = _members.iterator();
+						while (i.hasNext()) {
+							Contact contact = i.next();
+							DAL.Instance().insertMember(contact, _group);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						return;
@@ -83,7 +88,7 @@ public class EditGroupActivity extends Activity {
             }
         });	 
 
-		if (newgroup) {
+		if (_newgroup) {
 			_groupDeleteImageButton.setVisibility(View.INVISIBLE);
 		} else {
 			_groupNameEditText.setText(_group.get_name());
@@ -109,7 +114,7 @@ public class EditGroupActivity extends Activity {
 			Contact contact= (Contact)_contactsListView.getItemAtPosition(position);
 			contact.set_selected(true);
 			try {
-				DAL.Instance().insertMember(contact, _group);
+				if (!_newgroup) DAL.Instance().insertMember(contact, _group);
 				_membersAdapter.add(contact);
 				_contactsAdapter.remove(contact);
 			} catch (Exception e) {
@@ -118,9 +123,10 @@ public class EditGroupActivity extends Activity {
 		  }
 		});
 
-		_membersAdapter =  new CustomContactsAdapter(this, _members, true, true);
+		_membersAdapter =  new CustomContactsAdapter(this, _members, false, true);
        	_membersListView.setAdapter(_membersAdapter);
        	_membersListView.setClickable(true);
+       	_membersListView.setItemsCanFocus(true);
        	_membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		  @Override
 		  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -128,7 +134,7 @@ public class EditGroupActivity extends Activity {
 			contact.set_selected(false);
 			_contactsAdapter.add(contact);
 			_membersAdapter.remove(contact);
-			DAL.Instance().removeMember(contact, _group);
+			if (!_newgroup) DAL.Instance().removeMember(contact, _group);
 		  }
 		});
 }
