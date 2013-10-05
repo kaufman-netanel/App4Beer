@@ -15,7 +15,10 @@ import il.ac.huji.app4beer.DAL.PushEvent;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,58 +36,55 @@ public class Dashboard extends Activity {
 	private ArrayAdapter<Event> _adapter;
 	private List<Event> _events;
 	private ListView _eventsListView;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
-		
-		handlePushNotifications();
-		
+
+		handlePushNotifications(getIntent());
+
 		Button createEventButton = (Button)findViewById(R.id.create_event_btn);
 		createEventButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-    	        Intent myIntent = new Intent(Dashboard.this, CreateEventActivity.class);
-    	        Dashboard.this.startActivityForResult(myIntent, CreateEvent);
-            }
-        });	 
-		
-        _eventsListView = (ListView)findViewById(R.id.group_members_list);
-        loadEvents();
-		_eventsListView.setClickable(true);
-        _eventsListView.setItemsCanFocus(true);
-        _eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        	@Override
-        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		Event event = (Event)_eventsListView.getItemAtPosition(position);
-        		Intent myIntent = new Intent(Dashboard.this, EventManager.class);
-        		myIntent.putExtra("event", event.get_id());
-        		Dashboard.this.startActivityForResult(myIntent, ManageEvent);
-        	}
-        });
+			public void onClick(View v) {
+				Intent myIntent = new Intent(Dashboard.this, CreateEventActivity.class);
+				Dashboard.this.startActivityForResult(myIntent, CreateEvent);
+			}
+		});	 
 
+		_eventsListView = (ListView)findViewById(R.id.group_members_list);
+		loadEvents();
+		_eventsListView.setClickable(true);
+		_eventsListView.setItemsCanFocus(true);
+		_eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Event event = (Event)_eventsListView.getItemAtPosition(position);
+				opemEventManager(event);
+			}
+		});
 
 	}
 
-	private void handlePushNotifications() {
-		PushEnvelope env = ParseProxy.getTheEvelope(getIntent());
+	private void opemEventManager(Event event) {
+		Intent myIntent = new Intent(Dashboard.this, EventManager.class);
+		myIntent.putExtra("event", event.get_id());
+		Dashboard.this.startActivityForResult(myIntent, ManageEvent);
+	}
+
+	private void handlePushNotifications(Intent intent) {
+		PushEnvelope env = ParseProxy.getTheEvelope(intent);
 		if (env == null) return;
 		Gson gson = new Gson();
 		switch (env.getType()) {
 		case NewEvent:
-			PushEvent pEvent = gson.fromJson(env.getMessage(), PushEvent.class);
-			try {
-				pEvent.persist();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			loadEvents();
 			break;
 		case Tweet:
 			PushEvent.MessageParcel mParcel = gson.fromJson(env.getMessage(), PushEvent.MessageParcel.class);
 			try {
-				Message message = new Message(DAL.Instance().readContact(mParcel.get_contact()).get_id(),
-						DAL.Instance().readEvent(mParcel.get_event()).get_id(), mParcel.get_message());
-				DAL.Instance().insertMessage(message);
+				Event event = DAL.Instance().readEvent(mParcel.get_event());
+				opemEventManager(event);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -92,17 +92,13 @@ public class Dashboard extends Activity {
 		case UpdateAttendance:
 			PushEvent.Attendance att = gson.fromJson(env.getMessage(), PushEvent.Attendance.class);
 			try {
-				Contact contact = DAL.Instance().readContact(att.getContact());
-				contact.set_attending(att.getAtt());
 				Event event = DAL.Instance().readEvent(att.getEvent());
-				DAL.Instance().updateParticipant(contact, event);
+				opemEventManager(event);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		}
-		
-		
 	}
 
 	@Override
@@ -111,30 +107,30 @@ public class Dashboard extends Activity {
 		getMenuInflater().inflate(R.menu.dash, menu);
 		return true;
 	}
-	
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-    	case R.id.manage_groups:
-    		Intent intent = new Intent(this, ChooseParticipantsActivity.class);
-    		intent.putExtra("groupsonly", true);
-    		startActivity(intent);
-    		break;
-    	}
-    	return true;
-    }
-    
-    @Override
-	protected void onActivityResult(int reqCode, int resCode, Intent data) {
-    	switch (reqCode) {
-    	case ManageEvent:
-    	case CreateEvent:
-    		if (resCode==RESULT_OK) {
-    			loadEvents();
-    		}
-    		break;
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.manage_groups:
+			Intent intent = new Intent(this, ChooseParticipantsActivity.class);
+			intent.putExtra("groupsonly", true);
+			startActivity(intent);
+			break;
 		}
-  	}
+		return true;
+	}
+
+	@Override
+	protected void onActivityResult(int reqCode, int resCode, Intent data) {
+		switch (reqCode) {
+		case ManageEvent:
+		case CreateEvent:
+			if (resCode==RESULT_OK) {
+				loadEvents();
+			}
+			break;
+		}
+	}
 
 	private void loadEvents() {
 		_events = DAL.Instance().Events();
@@ -142,4 +138,29 @@ public class Dashboard extends Activity {
 		_eventsListView.setAdapter(_adapter);
 	}
 
+	private BroadcastReceiver _updateReceiver;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		_updateReceiver=new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals("il.ac.huji.app4beer.UPDATE_EVENT")) {
+					loadEvents();
+				}
+			}
+		};
+		IntentFilter updateIntentFilter=new IntentFilter("il.ac.huji.app4beer.UPDATE_EVENT");
+		registerReceiver(_updateReceiver, updateIntentFilter);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		if (this._updateReceiver!=null)
+			unregisterReceiver(_updateReceiver);
+	}
 }

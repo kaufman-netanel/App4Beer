@@ -36,6 +36,7 @@ public class ParseProxy {
 		private String alert;
 		private String json;
 		private PushType type;
+		private String action = "il.ac.huji.app4beer.UPDATE_STATUS";
 		public String getAlert() {
 			return alert;
 		}

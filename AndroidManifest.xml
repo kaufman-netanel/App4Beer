@@ -80,6 +80,12 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+        <receiver android:name="il.ac.huji.app4beer.MyCustomReceiver">
+			<intent-filter>
+  				<action android:name="il.ac.huji.app4beer.UPDATE_STATUS" />
+  				<action android:name="il.ac.huji.app4beer.UPDATE_EVENT" />
+			</intent-filter>
+		</receiver>
 </application>
 
 </manifest>

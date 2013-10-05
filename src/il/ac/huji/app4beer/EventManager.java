@@ -20,8 +20,10 @@ import il.ac.huji.app4beer.DAL.ParseProxy;
 import il.ac.huji.app4beer.DAL.PushEvent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
@@ -113,7 +115,7 @@ public class EventManager extends Activity {
 		} else {
 			_attendCustomPopup = new AttendCustomPopup(this, _attendButton);
 		}
-		
+
 		initChat();
 		_sendButton.setOnClickListener(new OnClickListener() {
 			
@@ -299,5 +301,36 @@ public class EventManager extends Activity {
             }
         }
         return ret;
+    }
+    
+    private BroadcastReceiver _updateReceiver;
+
+    @Override
+    protected void onResume() {
+    	super.onResume();
+
+    	_updateReceiver=new BroadcastReceiver() {
+    		@Override
+    		public void onReceive(Context context, Intent intent) {
+    			 if (intent.getAction().equals("il.ac.huji.app4beer.UPDATE_EVENT")) {
+    				 initChat();
+    				 for (int i=0;i<4;i++) {
+    					 List<Contact> c = DAL.Instance().Participants(_event.get_id(), i);
+    					 _contacts.set(i, c);
+    					 _contactsAdapter.set(i, new CustomContactsAdapter(EventManager.this, c, false, false));
+    				 }
+    			 }
+    		}
+    	};
+    	IntentFilter updateIntentFilter=new IntentFilter("il.ac.huji.app4beer.UPDATE_EVENT");
+    	registerReceiver(_updateReceiver, updateIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+    	super.onPause();
+
+    	if (this._updateReceiver!=null)
+    		unregisterReceiver(_updateReceiver);
     }
 }
