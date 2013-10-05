@@ -6,6 +6,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import android.os.Bundle;
@@ -98,9 +99,13 @@ public class SignUpOrSignInActivity extends Activity {
 						if (e==null) {
 							ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 							installation.put("username", _displayname.getText().toString());
-							installation.saveInBackground();
+							installation.saveInBackground(new SaveCallback() {
+								@Override
+								public void done(ParseException e) {
+									onDone(null, e, "SIGNED UP");
+								}
+							});
 						}
-						onDone(null, e, "SIGNED UP");
 					}
 				});
 			}
@@ -150,7 +155,7 @@ public class SignUpOrSignInActivity extends Activity {
                 imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
             }
         }
-    return ret;
+        return ret;
     }
    
 }

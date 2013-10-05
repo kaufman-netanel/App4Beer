@@ -21,6 +21,7 @@ import il.ac.huji.app4beer.DAL.PushEvent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
@@ -135,6 +136,11 @@ public class EventManager extends Activity {
 		_adapter =  new CustomMessagesAdapter(this, _messages);
 		_messagesListView.setAdapter(_adapter);
 		_messagesListView.setSelection(_messagesListView.getCount()-1);
+	}
+	
+	@Override
+	protected void onNewIntent (Intent intent) {
+		initChat();
 	}
 
 	@Override

@@ -34,6 +34,7 @@
         <activity
             android:name="il.ac.huji.app4beer.EventManager"
             android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_event_manager" >
         </activity>
         <activity
