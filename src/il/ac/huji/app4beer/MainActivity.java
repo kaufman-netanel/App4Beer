@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
         }
 		@Override
 		protected Void doInBackground(Void... params) {
-        	DAL.Init(MainActivity.this);
        	 	_moveOn = SignUpOrSignIn();
 			return null;
 		}   

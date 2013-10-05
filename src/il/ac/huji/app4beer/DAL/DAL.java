@@ -29,13 +29,26 @@ public class DAL {
 	private SQLiteDatabase _db;
 	private SharedPreferences _preferences;
 
+	private static Object _sync = new Object();
 	private static DAL _instance = null;
 	
 	public static void Init(Context context) {
-		_instance = new DAL(context);
+		synchronized(_sync) {
+			_instance = new DAL(context);
+			_sync.notifyAll();
+		}
+
 	}
 	
 	public static DAL Instance() {
+		synchronized(_sync) {
+			while (_instance==null) {
+				try {
+					_sync.wait();
+				} catch (InterruptedException e) {
+				}
+			}
+		}
 		return _instance;
 	}
 	
