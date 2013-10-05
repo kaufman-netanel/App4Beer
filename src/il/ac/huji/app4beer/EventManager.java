@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -126,13 +127,14 @@ public class EventManager extends Activity {
 				}				
 			}
 		});
-
+		
 	}
 
 	private void initChat() {
 		_messages = DAL.Instance().Messages(_event.get_id());
 		_adapter =  new CustomMessagesAdapter(this, _messages);
 		_messagesListView.setAdapter(_adapter);
+		_messagesListView.setSelection(_messagesListView.getCount()-1);
 	}
 
 	@Override
@@ -271,4 +273,25 @@ public class EventManager extends Activity {
 	
 	}
 	
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom()) ) { 
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return ret;
+    }
 }
