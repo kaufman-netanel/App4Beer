@@ -119,6 +119,8 @@ public class ChooseParticipantsActivity extends Activity {
         	_groupsListView.setVisibility(View.GONE);
         	_noGroupsTextView.setVisibility(View.VISIBLE);
         } else {
+        	_groupsListView.setVisibility(View.VISIBLE);
+        	_noGroupsTextView.setVisibility(View.GONE);
         	for (int i=0;i<_groups.size();i++) {
         		if (_selectedGroups.contains(_groups.get(i).get_id())) _groups.get(i).set_selected(true);
         	}
