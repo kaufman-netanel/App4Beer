@@ -75,7 +75,7 @@ public final class R {
         public static final int date_picker_value=0x7f080007;
         public static final int displayname=0x7f08002f;
         public static final int edit_group_image_button=0x7f08003f;
-        public static final int errmsg=0x7f080035;
+        public static final int errmsg=0x7f080034;
         public static final int eventAddParticipantsBtn=0x7f080012;
         public static final int eventDate=0x7f080016;
         public static final int eventDescription=0x7f080018;
@@ -93,15 +93,15 @@ public final class R {
         public static final int group_ok=0x7f08001d;
         public static final int manage_groups=0x7f080042;
         public static final int no_groups_text_view=0x7f08000c;
-        public static final int phonenumber=0x7f08002e;
+        public static final int phonenumber=0x7f080031;
         public static final int radioAttendingStatus=0x7f080001;
         public static final int sendBtn=0x7f080013;
-        public static final int signin=0x7f080030;
-        public static final int signup=0x7f080031;
+        public static final int signin=0x7f08002e;
+        public static final int signup=0x7f080035;
         public static final int single_group_name=0x7f08001b;
-        public static final int textView3=0x7f080032;
-        public static final int textView4=0x7f080033;
-        public static final int textView5=0x7f080034;
+        public static final int textView3=0x7f080030;
+        public static final int textView4=0x7f080032;
+        public static final int textView5=0x7f080033;
         public static final int timePicker1=0x7f080010;
     }
     public static final class layout {
